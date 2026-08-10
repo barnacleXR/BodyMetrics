@@ -11,6 +11,10 @@ struct ShareSheet: UIViewControllerRepresentable {
         controller.completionWithItemsHandler = { _, _, _, _ in
             onComplete?()
         }
+        // iPad 上需要 popover 锚点,否则崩溃
+        if let popover = controller.popoverPresentationController {
+            popover.sourceView = controller.view
+        }
         return controller
     }
 

@@ -45,8 +45,19 @@ enum StatsCalculator {
         let weightEntries = entries.filter { $0.metric == .weight }
         let thisWeek = weightEntries.filter { $0.date >= thisMonday && $0.date < nextMonday }
         let lastWeek = weightEntries.filter { $0.date >= lastMonday && $0.date < thisMonday }
-        guard !thisWeek.isEmpty, !lastWeek.isEmpty else { return nil }
-        return average(thisWeek.map(\.value)) - average(lastWeek.map(\.value))
+        guard let thisAvg = dailyMean(thisWeek, calendar: weekCalendar),
+              let lastAvg = dailyMean(lastWeek, calendar: weekCalendar)
+        else { return nil }
+        return thisAvg - lastAvg
+    }
+
+    /// 窗口内按日分组,取每日最新一条后求均值(同日多条不重复加权)
+    private static func dailyMean(_ entries: [MetricEntry], calendar: Calendar) -> Double? {
+        let dailyLatest: [Double] = Dictionary(grouping: entries, by: { calendar.startOfDay(for: $0.date) })
+            .values
+            .compactMap { $0.max(by: { $0.date < $1.date })?.value }
+        guard !dailyLatest.isEmpty else { return nil }
+        return dailyLatest.reduce(0, +) / Double(dailyLatest.count)
     }
 
     /// 本周状态展示:文案 + 带符号变化文本
@@ -99,7 +110,7 @@ enum StatsCalculator {
         let detail: String
         if abs(delta) <= 0.5 {
             title = String(localized: "保持平稳")
-            detail = String(localized: "近 30 天已减少 %@").replacingOccurrences(of: "%@", with: format1(abs(delta)) + " kg")
+            detail = String(localized: "近 30 天变化 %@").replacingOccurrences(of: "%@", with: format1(abs(delta)) + " kg")
         } else if delta < 0 {
             title = String(localized: "稳定向下")
             detail = String(localized: "近 30 天已减少 %@").replacingOccurrences(of: "%@", with: format1(abs(delta)) + " kg")
@@ -112,18 +123,14 @@ enum StatsCalculator {
 
     // MARK: - 格式化
 
-    /// 保留 1 位小数
+    /// 保留 1 位小数(固定 en_US_POSIX,避免德语等 locale 输出逗号导致 CSV 裂列)
     static func format1(_ value: Double) -> String {
-        String(format: "%.1f", value)
+        String(format: "%.1f", locale: Locale(identifier: "en_US_POSIX"), value)
     }
 
     /// 带符号文本,如 "−0.6 kg"(负号用减号;正数带 +)
     static func signedText(_ value: Double, unit: String) -> String {
         let sign = value < 0 ? "−" : "+"
         return sign + format1(abs(value)) + " " + unit
-    }
-
-    private static func average(_ values: [Double]) -> Double {
-        values.reduce(0, +) / Double(values.count)
     }
 }

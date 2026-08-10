@@ -5,6 +5,7 @@ import SwiftData
 struct LogSheetView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Query(sort: \MetricEntry.date, order: .reverse) private var entries: [MetricEntry]
 
     /// 初始指标(默认体重);targetDate 非 nil 时为日历页编辑(保存到该日)
     var initialMetric: Metric = .weight
@@ -129,10 +130,23 @@ struct LogSheetView: View {
         }
     }
 
-    /// 追加保存(同日同指标允许多条,不覆盖历史)
+    /// 追加保存(同日同指标允许多条,不覆盖历史);日历编辑时时间戳置于当日最新之后,保证编辑值成为当日代表值
     private func save() {
         guard let value = parsedValue else { return }
-        let entry = MetricEntry(metric: metricSelection, value: value, date: targetDate ?? .now)
+        var date = targetDate ?? .now
+        if let targetDate {
+            let calendar = Calendar.current
+            let dayStart = calendar.startOfDay(for: targetDate)
+            guard let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) else { return }
+            let latestSameDay = entries
+                .filter { $0.metric == metricSelection && $0.date >= dayStart && $0.date < dayEnd }
+                .max { $0.date < $1.date }
+            if let latestSameDay {
+                // 当日已有记录:排在最新一条之后(不超过当日 23:59:59,避免跨天)
+                date = min(latestSameDay.date.addingTimeInterval(1), dayEnd.addingTimeInterval(-1))
+            }
+        }
+        let entry = MetricEntry(metric: metricSelection, value: value, date: date)
         context.insert(entry)
         try? context.save()
         dismiss()
@@ -148,7 +162,7 @@ struct LogSheetView: View {
                 if hasDot { continue }
                 hasDot = true
                 result.append(ch)
-            } else if ch.isNumber {
+            } else if ch >= "0" && ch <= "9" {
                 if hasDot {
                     fractionDigits += 1
                     if fractionDigits > 1 { continue }

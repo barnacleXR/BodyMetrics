@@ -165,7 +165,7 @@ struct SettingsView: View {
         .sheet(item: $shareItem) { item in
             ShareSheet(items: [item.url]) {
                 showToastMessage(String(localized: "已导出「%@」")
-                    .replacingOccurrences(of: "%@", with: String(localized: "衡-体重记录.csv")))
+                    .replacingOccurrences(of: "%@", with: item.url.lastPathComponent))
             }
         }
         .overlay(alignment: .bottom) {
@@ -239,7 +239,7 @@ struct SettingsView: View {
     // MARK: - 操作
 
     private func saveGoal() {
-        guard let value = Double(goalText), value > 0 else { return }
+        guard let value = Double(goalText), value >= 30, value <= 300 else { return }
         profile?.goalWeight = value
         try? context.save()
     }

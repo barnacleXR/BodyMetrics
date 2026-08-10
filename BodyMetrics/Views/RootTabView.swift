@@ -42,7 +42,7 @@ struct RootTabView: View {
             }
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .background {
+            if phase == .inactive || phase == .background {
                 if lockEnabled { isLocked = true }
             } else if phase == .active {
                 if isLocked && lockEnabled {

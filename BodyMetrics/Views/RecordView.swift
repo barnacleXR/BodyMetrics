@@ -182,8 +182,11 @@ struct RecordView: View {
         guard let current = todayWeight else {
             return String(localized: "距离 \(goalText) 还有 —")
         }
-        let remaining = profile.goalWeight - current
-        let remainingText = remaining <= 0 ? "0.0 kg" : StatsCalculator.format1(remaining) + " kg"
+        let remaining = current - profile.goalWeight
+        if remaining <= 0 {
+            return String(localized: "已达成")
+        }
+        let remainingText = StatsCalculator.format1(remaining) + " kg"
         return String(localized: "距离 \(goalText) 还有 \(remainingText)")
     }
 

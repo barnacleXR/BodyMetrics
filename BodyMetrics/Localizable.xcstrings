@@ -1,6 +1,32 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "": {},
+    "—": {},
+    "%": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%"
+          }
+        }
+      }
+    },
+    "%@ %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ cm": {},
+    "%@ kg": {},
+    "%lld": {},
+    "%lld%%": {},
     "1个月": {
       "localizations": {
         "zh-Hans": {
@@ -31,22 +57,37 @@
         }
       }
     },
-    "%": {
+    "08:00": {
+      "extractionState": "stale",
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "%"
+            "value": "08:00"
           }
         }
       }
     },
+    "58.0": {},
+    "170": {},
     "BMI": {
+      "extractionState": "stale",
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "BMI"
+          }
+        }
+      }
+    },
+    "cm": {
+      "extractionState": "stale",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cm"
           }
         }
       }
@@ -67,6 +108,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "上升"
+          }
+        }
+      }
+    },
+    "上月": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上月"
+          }
+        }
+      }
+    },
+    "下月": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下月"
           }
         }
       }
@@ -111,6 +172,27 @@
         }
       }
     },
+    "体脂率": {},
+    "体重": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体重"
+          }
+        }
+      }
+    },
+    "体重单位": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体重单位"
+          }
+        }
+      }
+    },
     "保持平稳": {
       "localizations": {
         "zh-Hans": {
@@ -121,112 +203,13 @@
         }
       }
     },
+    "值": {},
     "关闭": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "关闭"
-          }
-        }
-      }
-    },
-    "本周状态": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "本周状态"
-          }
-        }
-      }
-    },
-    "未开启": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未开启"
-          }
-        }
-      }
-    },
-    "尚未记录": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "尚未记录"
-          }
-        }
-      }
-    },
-    "该记录体重啦": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "该记录体重啦"
-          }
-        }
-      }
-    },
-    "请先在系统设置中开启面容 ID 或触控 ID": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "请先在系统设置中开启面容 ID 或触控 ID"
-          }
-        }
-      }
-    },
-    "距离 %@ 还有 %@": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "距离 %@ 还有 %@"
-          }
-        }
-      }
-    },
-    "较昨日 %@": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "较昨日 %@"
-          }
-        }
-      }
-    },
-    "近 30 天已减少 %@": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "近 30 天已减少 %@"
-          }
-        }
-      }
-    },
-    "近 30 天已增加 %@": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "近 30 天已增加 %@"
-          }
-        }
-      }
-    },
-    "昨天": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "昨天"
           }
         }
       }
@@ -241,42 +224,112 @@
         }
       }
     },
-    "查看全部": {
+    "千克(kg)": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "查看全部"
+            "value": "千克(kg)"
           }
         }
       }
     },
-    "本月": {
+    "取消": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "本月"
+            "value": "取消"
           }
         }
       }
     },
-    "日历": {
+    "后台自动锁定": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "日历"
+            "value": "后台自动锁定"
           }
         }
       }
     },
-    "暂无数据": {
+    "完成": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "暂无数据"
+            "value": "完成"
+          }
+        }
+      }
+    },
+    "导出 CSV": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出 CSV"
+          }
+        }
+      }
+    },
+    "导出全部体重记录": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出全部体重记录"
+          }
+        }
+      }
+    },
+    "尚未记录": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚未记录"
+          }
+        }
+      }
+    },
+    "已导出「%@」": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已导出「%@」"
+          }
+        }
+      }
+    },
+    "已开启": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已开启"
+          }
+        }
+      }
+    },
+    "已锁定": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已锁定"
+          }
+        }
+      }
+    },
+    "我的目标": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "我的目标"
           }
         }
       }
@@ -291,12 +344,209 @@
         }
       }
     },
-    "记录提醒": {
+    "收起键盘": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "记录提醒"
+            "value": "收起键盘"
+          }
+        }
+      }
+    },
+    "数据与隐私": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数据与隐私"
+          }
+        }
+      }
+    },
+    "日历": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日历"
+          }
+        }
+      }
+    },
+    "日期": {},
+    "日期,体重(kg)": {},
+    "昨天": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨天"
+          }
+        }
+      }
+    },
+    "昨日": {
+      "extractionState": "stale",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨日"
+          }
+        }
+      }
+    },
+    "暂无数据": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无数据"
+          }
+        }
+      }
+    },
+    "未开启": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未开启"
+          }
+        }
+      }
+    },
+    "本周": {
+      "extractionState": "stale",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本周"
+          }
+        }
+      }
+    },
+    "本周状态": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本周状态"
+          }
+        }
+      }
+    },
+    "本月": {
+      "extractionState": "stale",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本月"
+          }
+        }
+      }
+    },
+    "查看全部": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看全部"
+          }
+        }
+      }
+    },
+    "每天 %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每天 %@"
+          }
+        }
+      }
+    },
+    "生物识别不可用": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生物识别不可用"
+          }
+        }
+      }
+    },
+    "用于解锁你的体重记录": {},
+    "目标体重": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目标体重"
+          }
+        }
+      }
+    },
+    "确定": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "确定"
+          }
+        }
+      }
+    },
+    "稳定上升": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "稳定上升"
+          }
+        }
+      }
+    },
+    "稳定向下": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "稳定向下"
+          }
+        }
+      }
+    },
+    "编辑": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "编辑"
+          }
+        }
+      }
+    },
+    "衡": {},
+    "衡-体重记录.csv": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "衡-体重记录.csv"
+          }
+        }
+      }
+    },
+    "解锁": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解锁"
           }
         }
       }
@@ -331,12 +581,115 @@
         }
       }
     },
+    "记录提醒": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "记录提醒"
+          }
+        }
+      }
+    },
     "设置": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "设置"
+          }
+        }
+      }
+    },
+    "该记录体重啦": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "该记录体重啦"
+          }
+        }
+      }
+    },
+    "请先在系统设置中开启面容 ID 或触控 ID": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先在系统设置中开启面容 ID 或触控 ID"
+          }
+        }
+      }
+    },
+    "趋势": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "趋势"
+          }
+        }
+      }
+    },
+    "趋势平稳": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "趋势平稳"
+          }
+        }
+      }
+    },
+    "趋势洞察": {
+      "extractionState": "stale",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "趋势洞察"
+          }
+        }
+      }
+    },
+    "距离 %@ 还有 —": {},
+    "距离 %@ 还有 %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "距离 %@ 还有 %@"
+          }
+        }
+      }
+    },
+    "身高": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "身高"
+          }
+        }
+      }
+    },
+    "身高 cm": {
+      "extractionState": "stale",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "身高 cm"
+          }
+        }
+      }
+    },
+    "较昨日 %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "较昨日 %@"
           }
         }
       }
@@ -361,302 +714,22 @@
         }
       }
     },
-    "数据与隐私": {
+    "近 30 天已减少 %@": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "数据与隐私"
+            "value": "近 30 天已减少 %@"
           }
         }
       }
     },
-    "稳定上升": {
+    "近 30 天已增加 %@": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "稳定上升"
-          }
-        }
-      }
-    },
-    "稳定向下": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "稳定向下"
-          }
-        }
-      }
-    },
-    "我的目标": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "我的目标"
-          }
-        }
-      }
-    },
-    "昨日": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "昨日"
-          }
-        }
-      }
-    },
-    "目标体重": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "目标体重"
-          }
-        }
-      }
-    },
-    "编辑": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "编辑"
-          }
-        }
-      }
-    },
-    "面容 ID / 触控 ID 解锁": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "面容 ID / 触控 ID 解锁"
-          }
-        }
-      }
-    },
-    "趋势": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "趋势"
-          }
-        }
-      }
-    },
-    "趋势洞察": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "趋势洞察"
-          }
-        }
-      }
-    },
-    "趋势平稳": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "趋势平稳"
-          }
-        }
-      }
-    },
-    "身高": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "身高"
-          }
-        }
-      }
-    },
-    "身高 cm": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "身高 cm"
-          }
-        }
-      }
-    },
-    "每天 %@": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每天 %@"
-          }
-        }
-      }
-    },
-    "导出 CSV": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "导出 CSV"
-          }
-        }
-      }
-    },
-    "导出全部体重记录": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "导出全部体重记录"
-          }
-        }
-      }
-    },
-    "已导出「%@」": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已导出「%@」"
-          }
-        }
-      }
-    },
-    "已开启": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已开启"
-          }
-        }
-      }
-    },
-    "完成": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完成"
-          }
-        }
-      }
-    },
-    "收起键盘": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "收起键盘"
-          }
-        }
-      }
-    },
-    "本周": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "本周"
-          }
-        }
-      }
-    },
-    "体重": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "体重"
-          }
-        }
-      }
-    },
-    "体重单位": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "体重单位"
-          }
-        }
-      }
-    },
-    "千克(kg)": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "千克(kg)"
-          }
-        }
-      }
-    },
-    "衡-体重记录.csv": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "衡-体重记录.csv"
-          }
-        }
-      }
-    },
-    "取消": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "取消"
-          }
-        }
-      }
-    },
-    "确定": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "确定"
-          }
-        }
-      }
-    },
-    "生物识别不可用": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "生物识别不可用"
-          }
-        }
-      }
-    },
-    "上月": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上月"
-          }
-        }
-      }
-    },
-    "下月": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下月"
+            "value": "近 30 天已增加 %@"
           }
         }
       }
@@ -671,52 +744,33 @@
         }
       }
     },
-    "后台自动锁定": {
+    "面容 ID / 触控 ID 解锁": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "后台自动锁定"
+            "value": "面容 ID / 触控 ID 解锁"
           }
         }
       }
     },
-    "cm": {
+    "首次记录": {},
+    "已达成": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "cm"
+            "value": "已达成"
           }
         }
       }
     },
-    "08:00": {
+    "近 30 天变化 %@": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "08:00"
-          }
-        }
-      }
-    },
-    "已锁定": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已锁定"
-          }
-        }
-      }
-    },
-    "解锁": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "解锁"
+            "value": "近 30 天变化 %@"
           }
         }
       }
