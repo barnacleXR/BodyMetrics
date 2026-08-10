@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  体重管理
+//  BodyMetrics
 //
 //  Created by XR on 2026/08/10.
 //
