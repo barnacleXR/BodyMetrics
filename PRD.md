@@ -118,15 +118,27 @@ final class UserProfile {
 - 隐私密码:本地 PIN 验证页(SwiftUI),PIN 哈希存 Keychain;ScenePhase 回到 active 且 `hasPIN` 时要求验证。
 - CSV:导出文件到临时目录后 ShareSheet 分享。
 - 不引入任何第三方依赖、不接入网络、不收集任何分析数据。
+- 颜色统一通过 `Assets.xcassets` 的 Color Set 管理(语义命名),代码禁止硬编码颜色值(见 §6)。
 
 ## 6. 视觉规格
 
 以原型代码(`src/index.css`、`src/App.tsx`)为准,要点:
 
-- 主色 `#258257`(按钮/强调),hero 渐变 `#246347 → #3f9b68`,页面背景 `#dfe7e1` 系。
+- **颜色集中管理(强制)**:所有颜色定义在 `Assets.xcassets` 的 Color Set(语义化命名),代码用 `Color("Name")` / `UIColor(named:)` 引用;**禁止在 Swift 代码中硬编码 hex、`Color(red:green:blue:)` 或 `UIColor(red:...)` 字面量**。原型中的色值只作为 Color Set 的取值参考:
+
+  | Color Set 命名 | 取值(浅色) | 用途 |
+  |---|---|---|
+  | `BrandGreen` | `#258257` | 主按钮、强调、tab tint |
+  | `HeroGradientStart` | `#246347` | 今日卡片渐变起点 |
+  | `HeroGradientEnd` | `#3f9b68` | 今日卡片渐变终点 |
+  | `PageBackground` | `#dfe7e1` | 页面背景 |
+  | `CardBackground` | 白色 80% 不透明度 | 列表卡背景 |
+  | `TextPrimary` | `#17231e` | 主文字 |
+  | `TextSecondary` | `#6e7e74` | 次要文字/说明 |
+
 - 数字使用等宽字体风格(DM Mono 等价物,系统 `monospacedDigit` 即可);正文系统字体。
 - 圆角列表卡、iOS 风格开关,均照原型;底部导航用系统原生 Liquid Glass,不自定义。
-- 深浅色:以浅色为主;深色模式 v1 不强制适配。
+- 深浅色:以浅色为主;Color Set 可同时提供 Dark 外观取值,深色模式 v1 不强制逐屏精调。
 
 ## 7. 验收标准
 
@@ -140,6 +152,7 @@ final class UserProfile {
 8. 导出 CSV 文件可用 Excel/Numbers 打开且中文不乱码;内容与记录一致。
 9. 设置隐私密码后,杀进程重启与后台恢复均需验证;关闭密码需原密码。
 10. App 飞行模式下全功能可用(纯本地验证)。
+11. 代码中不存在硬编码颜色字面量(hex / `Color(red:green:blue:)` / `UIColor(red:...)`);所有颜色来自 `Assets.xcassets` 的 Color Set,以 `Color("...")` 引用。
 
 ## 8. 设计缺口与默认决策(可改)
 
