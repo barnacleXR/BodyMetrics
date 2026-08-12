@@ -12,6 +12,14 @@
 xcuserdata/
 *.xcuserstate
 
+## Build output
+# xcodebuild 默认写到 ~/Library/Developer/Xcode/DerivedData,
+# 但带 -derivedDataPath 在项目目录里构建时会就地生成,不挡住很容易误提交
+build/
+DerivedData/
+.dd*/
+*.xcresult
+
 ## Obj-C/Swift specific
 *.hmap
 
@@ -72,3 +80,6 @@ fastlane/test_output
 .reasonix/
 reasonix.toml
 体重记录iOS应用-figma-make.zip
+
+# Claude Code 本地会话数据
+.claude/
