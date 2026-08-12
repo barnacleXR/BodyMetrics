@@ -6,7 +6,7 @@ struct BodyMetricsApp: App {
     let container: ModelContainer
 
     init() {
-        container = try! ModelContainer(for: MetricEntry.self, UserProfile.self, Reminder.self)
+        container = try! ModelContainer(for: Schema(AppSchema.models))
         ensureUserProfile(in: container.mainContext)
         ensureDefaultReminder(in: container.mainContext)
         syncReminders(in: container.mainContext)

@@ -339,5 +339,5 @@ private extension View {
 
 #Preview {
     SettingsView()
-        .modelContainer(for: [MetricEntry.self, UserProfile.self, Reminder.self], inMemory: true)
+        .modelContainer(for: AppSchema.models, inMemory: true)
 }

@@ -274,5 +274,5 @@ struct TrendView: View {
 
 #Preview {
     TrendView()
-        .modelContainer(for: [MetricEntry.self, UserProfile.self], inMemory: true)
+        .modelContainer(for: AppSchema.models, inMemory: true)
 }

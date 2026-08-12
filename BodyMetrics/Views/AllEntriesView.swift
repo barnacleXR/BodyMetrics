@@ -68,5 +68,5 @@ struct AllEntriesView: View {
 
 #Preview {
     AllEntriesView()
-        .modelContainer(for: [MetricEntry.self, UserProfile.self], inMemory: true)
+        .modelContainer(for: AppSchema.models, inMemory: true)
 }

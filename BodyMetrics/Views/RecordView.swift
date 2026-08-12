@@ -308,5 +308,5 @@ struct RecordView: View {
 
 #Preview {
     RecordView(selection: .constant(.record))
-        .modelContainer(for: [MetricEntry.self, UserProfile.self], inMemory: true)
+        .modelContainer(for: AppSchema.models, inMemory: true)
 }

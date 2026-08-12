@@ -164,5 +164,5 @@ struct RemindersView: View {
 
 #Preview {
     RemindersView()
-        .modelContainer(for: [MetricEntry.self, UserProfile.self, Reminder.self], inMemory: true)
+        .modelContainer(for: AppSchema.models, inMemory: true)
 }

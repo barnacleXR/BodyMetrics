@@ -7,10 +7,13 @@ final class Reminder {
     var id: UUID = UUID()
     var hour: Int = 8
     var minute: Int = 0
+    /// 提醒类型,只影响通知文案(晨间称重 / 记录饮食 / 训练后记录)
+    var kind: ReminderKind = ReminderKind.weighIn
 
-    init(hour: Int, minute: Int) {
+    init(hour: Int, minute: Int, kind: ReminderKind = .weighIn) {
         self.hour = hour
         self.minute = minute
+        self.kind = kind
     }
 
     /// 排序与去重用的一天内分钟数

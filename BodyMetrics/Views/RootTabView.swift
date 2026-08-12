@@ -70,5 +70,5 @@ struct RootTabView: View {
 
 #Preview {
     RootTabView()
-        .modelContainer(for: [MetricEntry.self, UserProfile.self, Reminder.self], inMemory: true)
+        .modelContainer(for: AppSchema.models, inMemory: true)
 }

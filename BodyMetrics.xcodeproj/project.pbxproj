@@ -6,6 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		35A32C083029F1E200645ADD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35A32BE53029F1E200645ADD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 35A32BEC3029F1E200645ADD;
+			remoteInfo = BodyMetrics;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		35A32BED3029F1E200645ADD /* BodyMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BodyMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35A32C013029F1E200645ADD /* BodyMetricsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BodyMetricsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,16 +190,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXContainerItemProxy section */
-		35A32C083029F1E200645ADD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 35A32BE53029F1E200645ADD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 35A32BEC3029F1E200645ADD;
-			remoteInfo = BodyMetrics;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXTargetDependency section */
 		35A32C073029F1E200645ADD /* PBXTargetDependency */ = {
