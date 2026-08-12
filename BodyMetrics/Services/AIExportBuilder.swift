@@ -9,24 +9,53 @@ enum AIExportBuilder {
 
     static let schemaVersion = 3
 
-    static let defaultPrompt = String(localized: """
-        以下是我的饮食、训练与体重数据(JSON)。请分析:
-        1. 热量与三大宏量的达成情况,指出偏差最大的项
-        2. 蛋白质摄入是否足够支撑训练量
-        3. 实测代谢(measuredTdee)与公式估算(estimatedTdee)的差异说明了什么
-        4. 体重的实际变化与按摄入预测的变化是否吻合,不吻合可能是什么原因
-        5. 给出 3 条具体可执行的调整建议
-        注意:kcalBurned 的 source 若为 device,误差可达 ±25%,请勿当作精确值参与能量平衡计算。
-        """)
+    /// 提示词跟着导出格式走:JSON 版可以直呼字段名,Markdown 版必须用中文说法,
+    /// 否则会让模型去找一个根本不存在的 `measuredTdee` 字段
+    static func prompt(singleDay: Bool, mentionsJSONFields: Bool) -> String {
+        let burnNote = mentionsJSONFields
+            ? String(localized: "注意:kcalBurned 的 source 若为 device,误差可达 ±25%,请勿当作精确值参与能量平衡计算。")
+            : String(localized: "注意:标注「设备读数」的消耗误差可达 ±25%,请勿当作精确值参与能量平衡计算。")
 
-    static let singleDayPrompt = String(localized: """
-        以下是我某一天的饮食与训练记录(JSON)。请分析:
-        1. 这一天的热量与三大宏量相对目标的缺口,指出偏差最大的项
-        2. 三餐的蛋白质分配是否合理
-        3. 如果还没吃完,建议接下来吃什么能补齐缺口
-        4. 指出这一天最值得改的一个点
-        注意:kcalBurned 的 source 若为 device,误差可达 ±25%,请勿当作精确值参与能量平衡计算。
-        """)
+        if singleDay {
+            let head = mentionsJSONFields
+                ? String(localized: "以下是我某一天的饮食与训练记录(JSON)。请分析:")
+                : String(localized: "以下是我某一天的饮食与训练记录。请分析:")
+            return """
+                \(head)
+                \(String(localized: "1. 这一天的热量与三大宏量相对目标的缺口,指出偏差最大的项"))
+                \(String(localized: "2. 三餐的蛋白质分配是否合理"))
+                \(String(localized: "3. 如果还没吃完,建议接下来吃什么能补齐缺口"))
+                \(String(localized: "4. 指出这一天最值得改的一个点"))
+                \(burnNote)
+                """
+        }
+
+        let head = mentionsJSONFields
+            ? String(localized: "以下是我的饮食、训练与体重数据(JSON)。请分析:")
+            : String(localized: "以下是我的饮食、训练与体重记录。请分析:")
+        let metabolismLine = mentionsJSONFields
+            ? String(localized: "3. 实测代谢(measuredTdee)与公式估算(estimatedTdee)的差异说明了什么")
+            : String(localized: "3. 实测代谢与公式估算 TDEE 的差异说明了什么")
+        return """
+            \(head)
+            \(String(localized: "1. 热量与三大宏量的达成情况,指出偏差最大的项"))
+            \(String(localized: "2. 蛋白质摄入是否足够支撑训练量"))
+            \(metabolismLine)
+            \(String(localized: "4. 体重的实际变化与按摄入预测的变化是否吻合,不吻合可能是什么原因"))
+            \(String(localized: "5. 给出 3 条具体可执行的调整建议"))
+            \(burnNote)
+            """
+    }
+
+    /// 全部四种组合,用于判断用户是否改过提示词
+    static var allDefaultPrompts: [String] {
+        [
+            prompt(singleDay: false, mentionsJSONFields: false),
+            prompt(singleDay: false, mentionsJSONFields: true),
+            prompt(singleDay: true, mentionsJSONFields: false),
+            prompt(singleDay: true, mentionsJSONFields: true),
+        ]
+    }
 
     // MARK: - Payload
 

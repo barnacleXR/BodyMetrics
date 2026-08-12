@@ -220,7 +220,7 @@ struct NutritionGoalView: View {
                            emphasized: true)
                 Divider().padding(.vertical, 9)
                 previewRow(label: String(localized: "三大宏量"),
-                           value: "P\(Int(plan.macros.proteinG)) F\(Int(plan.macros.fatG)) C\(Int(plan.macros.carbG))")
+                           value: plan.macros.compactSummaryText)
                 if let goalDate = plan.estimatedGoalDate {
                     Divider().padding(.vertical, 9)
                     previewRow(label: String(localized: "预计达成"),

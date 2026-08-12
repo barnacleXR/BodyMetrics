@@ -357,7 +357,7 @@ struct CalendarView: View {
                         .foregroundStyle(Color("TextSecondary"))
                 }
             }
-            Text("P \(StatsCalculator.format1(totals.macros.proteinG)) · F \(StatsCalculator.format1(totals.macros.fatG)) · C \(StatsCalculator.format1(totals.macros.carbG))")
+            Text(totals.macros.summaryText)
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundStyle(Color("TextSecondary"))
             if totals.volumeKg > 0 {

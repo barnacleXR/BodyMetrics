@@ -55,7 +55,7 @@ struct AIExportBuilderTests {
         return AIExportBuilder.build(
             days: days, dayLogs: dayLogs, entries: entries, targets: [],
             profile: profile, adaptive: adaptive, formulaTDEE: 2000,
-            prompt: AIExportBuilder.defaultPrompt, calendar: calendar
+            prompt: AIExportBuilder.prompt(singleDay: false, mentionsJSONFields: true), calendar: calendar
         )
     }
 

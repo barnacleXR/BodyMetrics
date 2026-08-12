@@ -66,6 +66,23 @@ struct MacroTotals: Equatable {
 
     static let zero = MacroTotals()
 
+    /// "蛋白质 31.0 · 脂肪 3.6 · 碳水 0.0"。
+    /// 不用 P/F/C 缩写:这三个字母对不熟悉营养学的人是天书,而中文没有歧义
+    var summaryText: String {
+        let protein = String(localized: "蛋白质")
+        let fat = String(localized: "脂肪")
+        let carb = String(localized: "碳水")
+        return "\(protein) \(StatsCalculator.format1(proteinG)) · \(fat) \(StatsCalculator.format1(fatG)) · \(carb) \(StatsCalculator.format1(carbG))"
+    }
+
+    /// 取整版,用于空间紧张的行内展示
+    var compactSummaryText: String {
+        let protein = String(localized: "蛋白质")
+        let fat = String(localized: "脂肪")
+        let carb = String(localized: "碳水")
+        return "\(protein) \(Int(proteinG.rounded())) · \(fat) \(Int(fatG.rounded())) · \(carb) \(Int(carbG.rounded()))"
+    }
+
     static func + (lhs: MacroTotals, rhs: MacroTotals) -> MacroTotals {
         MacroTotals(
             kcal: lhs.kcal + rhs.kcal,

@@ -94,7 +94,7 @@ struct DayRecordsList: View {
                         .font(.system(size: 14))
                         .foregroundStyle(Color("TextPrimary"))
                         .lineLimit(1)
-                    Text("\(item.amountText) · P\(StatsCalculator.format1(macros.proteinG)) F\(StatsCalculator.format1(macros.fatG)) C\(StatsCalculator.format1(macros.carbG))")
+                    Text("\(item.amountText) · \(macros.summaryText)")
                         .font(.system(size: 11, design: .monospaced))
                         .foregroundStyle(Color("TextSecondary"))
                         .lineLimit(1)

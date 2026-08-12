@@ -512,7 +512,7 @@ struct SettingsView: View {
         let rateText = rate == 0
             ? String(localized: "维持")
             : "\(rate < 0 ? "−" : "+")\(StatsCalculator.format1(abs(rate))) kg/\(String(localized: "周"))"
-        return "\(Int(current.kcal)) kcal · P\(Int(current.proteinG)) F\(Int(current.fatG)) C\(Int(current.carbG)) · \(rateText)"
+        return "\(Int(current.kcal)) kcal · \(current.macros.compactSummaryText) · \(rateText)"
     }
 
     private var exerciseLibrarySubtitle: String {

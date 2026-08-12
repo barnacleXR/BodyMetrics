@@ -141,9 +141,9 @@ struct FusedHeroCard: View {
 
     private func macroBars(target: MacroTotals) -> some View {
         HStack(spacing: 12) {
-            macroBar(label: "P", consumed: totals.macros.proteinG, goal: target.proteinG)
-            macroBar(label: "F", consumed: totals.macros.fatG, goal: target.fatG)
-            macroBar(label: "C", consumed: totals.macros.carbG, goal: target.carbG)
+            macroBar(label: String(localized: "蛋白质"), consumed: totals.macros.proteinG, goal: target.proteinG)
+            macroBar(label: String(localized: "脂肪"), consumed: totals.macros.fatG, goal: target.fatG)
+            macroBar(label: String(localized: "碳水"), consumed: totals.macros.carbG, goal: target.carbG)
         }
     }
 
@@ -151,14 +151,17 @@ struct FusedHeroCard: View {
         let ratio = goal > 0 ? min(consumed / goal, 1) : 0
         let over = goal > 0 && consumed > goal
         return VStack(alignment: .leading, spacing: 4) {
-            HStack(spacing: 0) {
+            HStack(spacing: 4) {
                 Text(label)
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(.white.opacity(0.85))
-                Spacer()
+                    .fixedSize()
+                Spacer(minLength: 0)
                 Text("\(Int(consumed.rounded()))/\(Int(goal.rounded()))")
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.85))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {

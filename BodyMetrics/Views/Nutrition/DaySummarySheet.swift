@@ -89,7 +89,7 @@ struct DaySummarySheet: View {
                         )
                 }
             }
-            Text("P \(StatsCalculator.format1(totals.macros.proteinG)) · F \(StatsCalculator.format1(totals.macros.fatG)) · C \(StatsCalculator.format1(totals.macros.carbG))")
+            Text(totals.macros.summaryText)
                 .font(.system(size: 12, design: .monospaced))
                 .foregroundStyle(Color("TextSecondary"))
             if totals.burnedKcal > 0 || totals.volumeKg > 0 {

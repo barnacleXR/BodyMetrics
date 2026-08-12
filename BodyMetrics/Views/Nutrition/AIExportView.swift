@@ -28,9 +28,24 @@ struct AIExportView: View {
         }
     }
 
+    enum ExportFormat: String, CaseIterable, Hashable {
+        case markdown, json
+
+        var label: String {
+            switch self {
+            case .markdown: return "Markdown"
+            case .json: return "JSON"
+            }
+        }
+
+        var fileExtension: String { self == .markdown ? "md" : "json" }
+    }
+
     @State private var range: ExportRange = .month
-    @State private var prompt = AIExportBuilder.defaultPrompt
-    @State private var promptEdited = false
+    /// 默认 Markdown:这份内容是粘进聊天框给模型看的,不被程序解析。
+    /// 同样的数据 token 少得多,用户自己也能扫一眼确认对不对
+    @State private var format: ExportFormat = .markdown
+    @State private var prompt = AIExportBuilder.prompt(singleDay: false, mentionsJSONFields: false)
     @State private var showArchiveSheet = false
     @State private var archiveText = ""
     @State private var toastMessage: ToastMessage?
@@ -96,8 +111,14 @@ struct AIExportView: View {
         )
     }
 
-    private var json: String { AIExportBuilder.encode(payload) }
-    private var sizeKB: Int { max(1, json.utf8.count / 1024) }
+    /// 按当前格式渲染出的正文
+    private var exportText: String {
+        format == .markdown
+            ? MarkdownExportRenderer.render(payload)
+            : AIExportBuilder.encode(payload)
+    }
+
+    private var sizeKB: Int { max(1, exportText.utf8.count / 1024) }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -108,16 +129,30 @@ struct AIExportView: View {
                         ForEach(ExportRange.allCases, id: \.self) { Text($0.label).tag($0) }
                     }
                     .pickerStyle(.segmented)
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 10)
                     .onChange(of: range) { _, _ in syncPromptIfUntouched() }
 
-                    LabeledField(label: "分析提示词(会写进 JSON 的 analysisPrompt)") {
+                    Picker("", selection: $format) {
+                        ForEach(ExportFormat.allCases, id: \.self) { Text($0.label).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.bottom, 6)
+                    .onChange(of: format) { _, _ in syncPromptIfUntouched() }
+
+                    Text(format == .markdown
+                         ? "贴给 AI 用 Markdown 就够了,同样的数据更省 token,你自己也读得懂。"
+                         : "JSON 适合喂给脚本处理;贴进对话框会多花不少 token。")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color("TextSecondary"))
+                        .lineSpacing(3)
+                        .padding(.bottom, 16)
+
+                    LabeledField(label: "分析提示词(会一并附在导出内容里)") {
                         TextField("", text: $prompt, axis: .vertical)
                             .font(.system(size: 13))
                             .lineLimit(5...12)
                             .padding(12)
                             .cardBackground(cornerRadius: 13)
-                            .onChange(of: prompt) { _, _ in promptEdited = true }
                     }
 
                     rangeSummary
@@ -160,24 +195,25 @@ struct AIExportView: View {
     private var exportButtons: some View {
         HStack(spacing: 10) {
             GhostButton(title: "分享文件", systemImage: "square.and.arrow.up") {
-                let name = payload.range.from == payload.range.to
-                    ? "bodymetrics-\(payload.range.from).json"
-                    : "bodymetrics-\(payload.range.from)_\(payload.range.to).json"
-                let url = FileManager.default.temporaryDirectory.appendingPathComponent(name)
+                let base = payload.range.from == payload.range.to
+                    ? "bodymetrics-\(payload.range.from)"
+                    : "bodymetrics-\(payload.range.from)_\(payload.range.to)"
+                let url = FileManager.default.temporaryDirectory
+                    .appendingPathComponent("\(base).\(format.fileExtension)")
                 do {
-                    try json.write(to: url, atomically: true, encoding: .utf8)
+                    try exportText.write(to: url, atomically: true, encoding: .utf8)
                     shareItem = ShareItem(url: url)
                 } catch {
                     toastMessage = ToastMessage(text: String(localized: "导出失败"))
                 }
             }
             Button {
-                UIPasteboard.general.string = json
-                toastMessage = ToastMessage(text: String(localized: "已复制 JSON"))
+                UIPasteboard.general.string = exportText
+                toastMessage = ToastMessage(text: String(localized: "已复制，粘给 AI 即可"))
             } label: {
                 HStack(spacing: 7) {
                     Image(systemName: "doc.on.doc").font(.system(size: 14, weight: .medium))
-                    Text("复制 JSON").font(.system(size: 14, weight: .medium))
+                    Text("复制").font(.system(size: 14, weight: .medium))
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 44)
@@ -290,18 +326,22 @@ struct AIExportView: View {
             rangeTo: dateRange.to,
             promptUsed: prompt,
             responseText: archiveText.trimmingCharacters(in: .whitespacesAndNewlines),
-            payloadSnapshot: Data(json.utf8)
+            // 快照始终存 JSON:存档是给程序回看的,要的是结构完整而非好读
+            payloadSnapshot: Data(AIExportBuilder.encode(payload).utf8)
         ))
         try? context.save()
         showArchiveSheet = false
         toastMessage = ToastMessage(text: String(localized: "已存档"))
     }
 
-    /// 切到单日/多日时换用对应的默认提示词,但用户改过就不动
+    /// 区间或格式变化时换用对应的默认提示词,但用户手写过就不动。
+    /// 用"当前值是否等于某个默认值"判断有没有被改过,比维护一个 edited 标记更可靠——
+    /// 后者在自己写回 prompt 时会被 onChange 误置为 true
     private func syncPromptIfUntouched() {
-        guard !promptEdited else { return }
-        let wanted = range == .day ? AIExportBuilder.singleDayPrompt : AIExportBuilder.defaultPrompt
-        prompt = wanted
-        promptEdited = false
+        guard AIExportBuilder.allDefaultPrompts.contains(prompt) else { return }
+        prompt = AIExportBuilder.prompt(
+            singleDay: range == .day,
+            mentionsJSONFields: format == .json
+        )
     }
 }

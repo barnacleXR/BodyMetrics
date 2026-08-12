@@ -176,7 +176,7 @@ struct FoodFormView: View {
                 .font(.system(size: 12))
                 .foregroundStyle(Color("TextSecondary"))
             Spacer()
-            Text("\(Int(macros.kcal.rounded())) kcal · P\(StatsCalculator.format1(macros.proteinG)) F\(StatsCalculator.format1(macros.fatG)) C\(StatsCalculator.format1(macros.carbG))")
+            Text("\(Int(macros.kcal.rounded())) kcal · \(macros.summaryText)")
                 .font(.system(size: 12, design: .monospaced))
                 .foregroundStyle(Color("TextPrimary"))
         }

@@ -43,6 +43,7 @@ final class FoodPreset {
         let basisText = basis == .per100g
             ? String(localized: "每 100 g")
             : String(localized: "每") + (servingLabel.isEmpty ? String(localized: "份") : servingLabel)
-        return "\(basisText) · \(Int(kcal.rounded())) kcal · P\(StatsCalculator.format1(proteinG)) F\(StatsCalculator.format1(fatG)) C\(StatsCalculator.format1(carbG))"
+        let macros = MacroTotals(kcal: kcal, proteinG: proteinG, fatG: fatG, carbG: carbG)
+        return "\(basisText) · \(Int(kcal.rounded())) kcal · \(macros.summaryText)"
     }
 }
