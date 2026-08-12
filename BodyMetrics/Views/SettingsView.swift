@@ -12,8 +12,14 @@ struct SettingsView: View {
     @Query(sort: \MetricEntry.date, order: .reverse) private var entries: [MetricEntry]
     @Query private var profiles: [UserProfile]
     @Query private var reminders: [Reminder]
+    @Query private var foodPresets: [FoodPreset]
+    @Query private var customExercises: [CustomExercise]
+    @Query(sort: \NutritionTarget.effectiveFrom) private var targets: [NutritionTarget]
     @Environment(\.modelContext) private var context
 
+    @State private var showGoalPlanner = false
+    @State private var showFoodLibrary = false
+    @State private var showExerciseLibrary = false
     @State private var showGoalEditor = false
     @State private var goalText = ""
     @State private var showHeightEditor = false
@@ -37,15 +43,37 @@ struct SettingsView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 22)
 
-                    // 记录
-                    groupTitle("记录")
+                    // 目标
+                    groupTitle("目标")
                     VStack(spacing: 0) {
-                        row(icon: "target", iconPale: true, title: "我的目标") {
+                        Button {
+                            showGoalPlanner = true
+                        } label: {
+                            HStack(spacing: 11) {
+                                roundIcon("target", pale: false)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("每日目标")
+                                        .font(.system(size: 14))
+                                    Text(targetSubtitle)
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(Color("TextSecondary"))
+                                }
+                                Spacer()
+                                chevron
+                            }
+                            .frame(minHeight: 64)
+                            .padding(.horizontal, 14)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        Divider().padding(.leading, 57)
+                        row(icon: "flag", iconPale: true, title: "目标体重") {
                             Text(goalValueText)
                                 .font(.system(size: 12, design: .monospaced))
                                 .foregroundStyle(Color("TextSecondary"))
                             chevron
                         }
+                        .contentShape(Rectangle())
                         .onTapGesture {
                             goalText = profile.map { StatsCalculator.format1($0.goalWeight) } ?? ""
                             showGoalEditor = true
@@ -57,10 +85,98 @@ struct SettingsView: View {
                                 .foregroundStyle(Color("TextSecondary"))
                             chevron
                         }
+                        .contentShape(Rectangle())
                         .onTapGesture {
                             heightText = profile.map { String(Int($0.heightCm.rounded())) } ?? "170"
                             showHeightEditor = true
                         }
+                    }
+                    .card()
+
+                    // 偏好
+                    groupTitle("偏好")
+                    VStack(spacing: 0) {
+                        HStack(spacing: 11) {
+                            roundIcon("flame", pale: true)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("训练消耗回补额度")
+                                    .font(.system(size: 14))
+                                Text("活动系数已含日常活动,开启会双重计算")
+                                    .font(.system(size: 11))
+                                    .foregroundStyle(Color("TextSecondary"))
+                            }
+                            Spacer()
+                            Toggle("", isOn: addBurnedBinding)
+                                .labelsHidden()
+                                .tint(Color("BrandGreen"))
+                        }
+                        .frame(minHeight: 64)
+                        .padding(.horizontal, 14)
+                        Divider().padding(.leading, 57)
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(spacing: 11) {
+                                roundIcon("circle.lefthalf.filled", pale: true)
+                                Text("外观")
+                                    .font(.system(size: 14))
+                                Spacer()
+                            }
+                            Picker("", selection: themeBinding) {
+                                ForEach(ThemePreference.allCases, id: \.self) { Text($0.label).tag($0) }
+                            }
+                            .pickerStyle(.segmented)
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 12)
+                    }
+                    .card()
+
+                    // 资料库
+                    groupTitle("资料库")
+                    VStack(spacing: 0) {
+                        Button {
+                            showFoodLibrary = true
+                        } label: {
+                            HStack(spacing: 11) {
+                                roundIcon("fork.knife", pale: false)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("常用食物")
+                                        .font(.system(size: 14))
+                                    Text("记录过的会自动入库,可在这里改错值")
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(Color("TextSecondary"))
+                                }
+                                Spacer()
+                                Text("\(foodPresets.count)")
+                                    .font(.system(size: 12, design: .monospaced))
+                                    .foregroundStyle(Color("TextSecondary"))
+                                chevron
+                            }
+                            .frame(minHeight: 64)
+                            .padding(.horizontal, 14)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        Divider().padding(.leading, 57)
+                        Button {
+                            showExerciseLibrary = true
+                        } label: {
+                            HStack(spacing: 11) {
+                                roundIcon("dumbbell", pale: true)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("动作库")
+                                        .font(.system(size: 14))
+                                    Text(exerciseLibrarySubtitle)
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(Color("TextSecondary"))
+                                }
+                                Spacer()
+                                chevron
+                            }
+                            .frame(minHeight: 64)
+                            .padding(.horizontal, 14)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
                     }
                     .card()
 
@@ -170,6 +286,15 @@ struct SettingsView: View {
         .sheet(isPresented: $showReminders) {
             RemindersView()
         }
+        .sheet(isPresented: $showGoalPlanner) {
+            NutritionGoalView()
+        }
+        .sheet(isPresented: $showFoodLibrary) {
+            FoodLibraryView()
+        }
+        .sheet(isPresented: $showExerciseLibrary) {
+            ExerciseLibraryView()
+        }
         .sheet(item: $shareItem) { item in
             ShareSheet(items: [item.url]) {
                 showToastMessage(String(localized: "已导出「%@」")
@@ -262,6 +387,46 @@ struct SettingsView: View {
 
     private var goalValueText: String {
         profile.map { "\(StatsCalculator.format1($0.goalWeight)) kg" } ?? "—"
+    }
+
+    /// 已设目标时显示热量与速度,没设时提示去设
+    private var targetSubtitle: String {
+        guard let current = NutritionCalculator.target(on: .now, in: targets) else {
+            return String(localized: "尚未设定,由目标体重与速度推算")
+        }
+        let rate = profile?.weeklyRateKg ?? 0
+        let rateText = rate == 0
+            ? String(localized: "维持")
+            : "\(rate < 0 ? "−" : "+")\(StatsCalculator.format1(abs(rate))) kg/\(String(localized: "周"))"
+        return "\(Int(current.kcal)) kcal · P\(Int(current.proteinG)) F\(Int(current.fatG)) C\(Int(current.carbG)) · \(rateText)"
+    }
+
+    private var exerciseLibrarySubtitle: String {
+        let builtin = ExerciseCatalog.strength.count + ExerciseCatalog.cardio.count
+        let hidden = profile?.hiddenBuiltinExerciseIDs.count ?? 0
+        var text = String(localized: "\(builtin) 个内置 · 自定义 \(customExercises.count) 个")
+        if hidden > 0 { text += String(localized: " · 已隐藏 \(hidden)") }
+        return text
+    }
+
+    private var addBurnedBinding: Binding<Bool> {
+        Binding(
+            get: { profile?.addBurnedToBudget ?? false },
+            set: { newValue in
+                profile?.addBurnedToBudget = newValue
+                try? context.save()
+            }
+        )
+    }
+
+    private var themeBinding: Binding<ThemePreference> {
+        Binding(
+            get: { profile?.themePreference ?? .system },
+            set: { newValue in
+                profile?.themePreference = newValue
+                try? context.save()
+            }
+        )
     }
 
     // MARK: - 操作

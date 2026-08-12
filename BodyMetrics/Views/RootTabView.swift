@@ -15,6 +15,15 @@ struct RootTabView: View {
 
     private var lockEnabled: Bool { profiles.first?.biometricLockEnabled ?? false }
 
+    /// nil 表示跟随系统
+    private var colorScheme: ColorScheme? {
+        switch profiles.first?.themePreference ?? .system {
+        case .system: return nil
+        case .light: return .light
+        case .dark: return .dark
+        }
+    }
+
     var body: some View {
         ZStack {
             TabView(selection: $selection) {
@@ -41,6 +50,7 @@ struct RootTabView: View {
                 .zIndex(10)
             }
         }
+        .preferredColorScheme(colorScheme)
         .onChange(of: scenePhase) { _, phase in
             if phase == .inactive || phase == .background {
                 if lockEnabled { isLocked = true }

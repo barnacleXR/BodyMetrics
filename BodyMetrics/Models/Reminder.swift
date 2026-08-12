@@ -7,13 +7,19 @@ final class Reminder {
     var id: UUID = UUID()
     var hour: Int = 8
     var minute: Int = 0
-    /// 提醒类型,只影响通知文案(晨间称重 / 记录饮食 / 训练后记录)
-    var kind: ReminderKind = ReminderKind.weighIn
+    /// 提醒类型,只影响通知文案(晨间称重 / 记录饮食 / 训练后记录)。
+    /// 用可空原始值存:轻量迁移不回填默认值,老用户已有的提醒行里是 NULL,
+    /// 非可选枚举一读就崩(详见 UserProfile 里的同类说明)
+    var kindRaw: String? = nil
+    var kind: ReminderKind {
+        get { kindRaw.flatMap(ReminderKind.init(rawValue:)) ?? .weighIn }
+        set { kindRaw = newValue.rawValue }
+    }
 
     init(hour: Int, minute: Int, kind: ReminderKind = .weighIn) {
         self.hour = hour
         self.minute = minute
-        self.kind = kind
+        self.kindRaw = kind.rawValue
     }
 
     /// 排序与去重用的一天内分钟数

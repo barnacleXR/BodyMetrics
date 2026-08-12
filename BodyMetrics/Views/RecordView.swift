@@ -18,6 +18,7 @@ struct RecordView: View {
     @State private var showEntrySheet = false
     @State private var editTarget: DayRecordsList.RecordTarget?
     @State private var showAllEntries = false
+    @State private var showGoalPlanner = false
     @State private var toastMessage: ToastMessage?
     @State private var noteText = ""
     @State private var noteLoadedFor: Date?
@@ -99,7 +100,7 @@ struct RecordView: View {
                             target: activeTarget,
                             // 有试算内容时 Hero 直接显示"吃完之后"的剩余,不用来回换算
                             remaining: draftEntries.isEmpty ? remaining : remainingWithDraft,
-                            onSetupTarget: { selection = .settings }
+                            onSetupTarget: { showGoalPlanner = true }
                         )
                         if !draftEntries.isEmpty { draftSection }
                         goalSection
@@ -132,6 +133,7 @@ struct RecordView: View {
             }
         }
         .sheet(isPresented: $showAllEntries) { AllEntriesView() }
+        .sheet(isPresented: $showGoalPlanner) { NutritionGoalView() }
         .toast($toastMessage, bottomPadding: 86)
         .onAppear(perform: loadNote)
         .onChange(of: viewDate) { _, _ in
