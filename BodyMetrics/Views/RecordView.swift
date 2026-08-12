@@ -21,6 +21,8 @@ struct RecordView: View {
     @State private var toastMessage: ToastMessage?
     @State private var noteText = ""
     @State private var noteLoadedFor: Date?
+    /// 试算内容不落盘,切换日期时清空——否则会把 A 日的假设带到 B 日
+    @State private var draftEntries: [DraftEntry] = []
 
     private let calendar = Calendar.current
     private var profile: UserProfile? { profiles.first }
@@ -43,6 +45,20 @@ struct RecordView: View {
             totals: totals,
             target: activeTarget,
             addBurnedToBudget: profile?.addBurnedToBudget ?? false
+        )
+    }
+
+    private var draftMacros: MacroTotals {
+        draftEntries.reduce(MacroTotals.zero) { $0 + $1.draft.macros }
+    }
+
+    /// 把试算内容也算进去之后的剩余额度
+    private var remainingWithDraft: RemainingBudget {
+        NutritionCalculator.remaining(
+            totals: totals,
+            target: activeTarget,
+            addBurnedToBudget: profile?.addBurnedToBudget ?? false,
+            draft: draftMacros
         )
     }
 
@@ -81,9 +97,11 @@ struct RecordView: View {
                             deltaVsYesterday: deltaVsPreviousDay,
                             totals: totals,
                             target: activeTarget,
-                            remaining: remaining,
+                            // 有试算内容时 Hero 直接显示"吃完之后"的剩余,不用来回换算
+                            remaining: draftEntries.isEmpty ? remaining : remainingWithDraft,
                             onSetupTarget: { selection = .settings }
                         )
+                        if !draftEntries.isEmpty { draftSection }
                         goalSection
                         if totals.burnedKcal > 0 { burnedRow }
                         recordsSection
@@ -97,9 +115,16 @@ struct RecordView: View {
             }
         }
         .sheet(isPresented: $showEntrySheet) {
-            RecordEntrySheet(date: viewDate) { message in
-                toastMessage = ToastMessage(text: message)
-            }
+            RecordEntrySheet(
+                date: viewDate,
+                onRecorded: { message in
+                    toastMessage = ToastMessage(text: message)
+                },
+                onAddToDraft: { draft, mealType in
+                    draftEntries.append(DraftEntry(draft: draft, mealType: mealType))
+                    toastMessage = ToastMessage(text: String(localized: "已加入试算"))
+                }
+            )
         }
         .sheet(item: $editTarget) { target in
             EditRecordSheet(target: target, date: viewDate) { message, undo in
@@ -109,7 +134,35 @@ struct RecordView: View {
         .sheet(isPresented: $showAllEntries) { AllEntriesView() }
         .toast($toastMessage, bottomPadding: 86)
         .onAppear(perform: loadNote)
-        .onChange(of: viewDate) { _, _ in loadNote() }
+        .onChange(of: viewDate) { _, _ in
+            loadNote()
+            draftEntries = []
+        }
+    }
+
+    // MARK: - 试算
+
+    private var draftSection: some View {
+        DraftBoxView(
+            entries: draftEntries,
+            remainingBefore: remaining,
+            remainingAfter: remainingWithDraft,
+            hasTarget: activeTarget != nil,
+            onRemove: { entry in
+                draftEntries.removeAll { $0.id == entry.id }
+            },
+            onClear: { draftEntries = [] },
+            onCommit: commitDraft
+        )
+    }
+
+    private func commitDraft() {
+        for entry in draftEntries {
+            DayLogService.addFood(entry.draft, mealType: entry.mealType, on: viewDate, in: context, calendar: calendar)
+        }
+        let count = draftEntries.count
+        draftEntries = []
+        toastMessage = ToastMessage(text: String(localized: "已记入 \(count) 项"))
     }
 
     // MARK: - 页头(日期导航)

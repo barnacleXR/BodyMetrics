@@ -23,6 +23,8 @@ struct RecordEntrySheet: View {
     let date: Date
     var initialMode: Mode = .food
     var onRecorded: (String) -> Void
+    /// 加入试算(不落盘)。由记录页持有试算内容,所以这里只往上抛
+    var onAddToDraft: ((FoodDraft, MealType) -> Void)?
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -30,6 +32,8 @@ struct RecordEntrySheet: View {
 
     @State private var mode: Mode = .food
     @State private var didSetMode = false
+    @State private var showFoodLibrary = false
+    @State private var showExerciseLibrary = false
 
     private var isToday: Bool { Calendar.current.isDateInToday(date) }
 
@@ -44,14 +48,24 @@ struct RecordEntrySheet: View {
             .padding(.horizontal, 23)
             .padding(.top, 14)
 
-            if !isToday {
-                Text("补录到 \(date.formatted(.dateTime.month().day()))")
-                    .font(.system(size: 11))
-                    .foregroundStyle(Color("TextSecondary"))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 23)
-                    .padding(.top, 10)
+            HStack {
+                if !isToday {
+                    Text("补录到 \(date.formatted(.dateTime.month().day()))")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color("TextSecondary"))
+                }
+                Spacer()
+                if mode != .weight {
+                    Button(mode == .food ? String(localized: "常用食物") : String(localized: "动作库")) {
+                        if mode == .food { showFoodLibrary = true } else { showExerciseLibrary = true }
+                    }
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color("BrandGreen"))
+                }
             }
+            .frame(minHeight: 18)
+            .padding(.horizontal, 23)
+            .padding(.top, 10)
 
             ScrollView {
                 Group {
@@ -62,11 +76,20 @@ struct RecordEntrySheet: View {
                             dismiss()
                         }
                     case .food:
-                        FoodFormView(initial: nil) { draft, mealType in
-                            DayLogService.addFood(draft, mealType: mealType, on: date, in: context)
-                            onRecorded(String(localized: "已记录"))
-                            dismiss()
-                        }
+                        FoodFormView(
+                            initial: nil,
+                            onSubmit: { draft, mealType in
+                                DayLogService.addFood(draft, mealType: mealType, on: date, in: context)
+                                onRecorded(String(localized: "已记录"))
+                                dismiss()
+                            },
+                            onAddToDraft: onAddToDraft.map { handler in
+                                { draft, mealType in
+                                    handler(draft, mealType)
+                                    dismiss()
+                                }
+                            }
+                        )
                     case .strength:
                         StrengthFormView(initial: nil) { draft in
                             DayLogService.addStrength(draft, on: date, in: context)
@@ -89,6 +112,10 @@ struct RecordEntrySheet: View {
         .background(Color("PageBackground"))
         .presentationDetents([.large])
         .presentationDragIndicator(.hidden)
+        .sheet(isPresented: $showFoodLibrary) { FoodLibraryView() }
+        .sheet(isPresented: $showExerciseLibrary) {
+            ExerciseLibraryView(initialKind: mode == .cardio ? .cardio : .strength)
+        }
         .onAppear {
             guard !didSetMode else { return }
             didSetMode = true
