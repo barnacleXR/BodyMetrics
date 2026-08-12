@@ -4,12 +4,38 @@ import SwiftData
 /// 日历页:月视图(周日开头,周日起始)+ 当日详情 + 编辑
 struct CalendarView: View {
     @Query(sort: \MetricEntry.date, order: .reverse) private var entries: [MetricEntry]
+    @Query private var dayLogs: [DayLog]
+    @Query(sort: \NutritionTarget.effectiveFrom) private var targets: [NutritionTarget]
     @Environment(\.modelContext) private var context
 
     @State private var visibleMonth: Date = Calendar.current.startOfDay(for: .now)
     @State private var selectedDay: Date = Calendar.current.startOfDay(for: .now)
     @State private var showEditSheet = false
     @State private var showDeleteConfirm = false
+    @State private var showDaySummary = false
+
+    /// 当天的饮食训练记录
+    private func dayLog(for date: Date) -> DayLog? {
+        dayLogs.first { calendar.isDate($0.dayStart, inSameDayAs: date) }
+    }
+
+    /// 日期格的三个状态:有体重值(直接显数字)、热量达标与否、有没有训练
+    private enum KcalMark {
+        case none, onTarget, off
+    }
+
+    private func kcalMark(for date: Date) -> KcalMark {
+        guard let log = dayLog(for: date), !log.meals.allSatisfy({ $0.items.isEmpty }) else { return .none }
+        let totals = NutritionCalculator.totals(for: log)
+        let target = NutritionCalculator.target(on: date, in: targets, calendar: calendar)?.kcal ?? 0
+        guard target > 0 else { return .onTarget }
+        return NutritionCalculator.isKcalOnTarget(totals.macros.kcal, target: target) ? .onTarget : .off
+    }
+
+    private func hasTraining(on date: Date) -> Bool {
+        guard let log = dayLog(for: date) else { return false }
+        return !log.strength.isEmpty || !log.cardio.isEmpty
+    }
 
     private var calendar: Calendar { Calendar.current }
 
@@ -206,6 +232,23 @@ struct CalendarView: View {
                         .foregroundStyle(Color("TextSecondary"))
                 }
                 Spacer(minLength: 0)
+                // 一个格子说完三件事:称了多重、吃得达不达标、练没练
+                HStack(spacing: 3) {
+                    switch kcalMark(for: date) {
+                    case .none:
+                        EmptyView()
+                    case .onTarget:
+                        Circle().fill(Color("BrandGreen")).frame(width: 5, height: 5)
+                    case .off:
+                        Circle().fill(Color(red: 0.85, green: 0.6, blue: 0.15)).frame(width: 5, height: 5)
+                    }
+                    if hasTraining(on: date) {
+                        Image(systemName: "dumbbell.fill")
+                            .font(.system(size: 6))
+                            .foregroundStyle(Color("TextSecondary"))
+                    }
+                }
+                .frame(height: 7)
             }
             .frame(maxWidth: .infinity, minHeight: 74, alignment: .topLeading)
             .padding(6)
@@ -227,39 +270,63 @@ struct CalendarView: View {
     // MARK: - 当日详情
 
     private var detailBar: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(detailTitle)
-                    .font(.system(size: 11))
-                    .foregroundStyle(Color("TextSecondary"))
-                Text(selectedValue.map { "\(StatsCalculator.format1($0)) kg" } ?? "—")
-                    .font(.system(size: 22, weight: .medium, design: .monospaced))
-                    .monospacedDigit()
-                    .foregroundStyle(Color("BrandGreen"))
-            }
-            Spacer()
-            if selectedEntry != nil {
-                Button(String(localized: "删除")) {
-                    showDeleteConfirm = true
+        VStack(spacing: 12) {
+            HStack {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(detailTitle)
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color("TextSecondary"))
+                    Text(selectedValue.map { "\(StatsCalculator.format1($0)) kg" } ?? "—")
+                        .font(.system(size: 22, weight: .medium, design: .monospaced))
+                        .monospacedDigit()
+                        .foregroundStyle(Color("BrandGreen"))
+                }
+                Spacer()
+                if selectedEntry != nil {
+                    Button(String(localized: "删除")) {
+                        showDeleteConfirm = true
+                    }
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color.red.opacity(0.85))
+                    .padding(.horizontal, 14)
+                    .frame(height: 34)
+                    .background(Color.red.opacity(0.10), in: RoundedRectangle(cornerRadius: 11))
+                }
+                Button(String(localized: "编辑")) {
+                    showEditSheet = true
                 }
                 .font(.system(size: 12))
-                .foregroundStyle(Color.red.opacity(0.85))
+                .foregroundStyle(Color("BrandGreen"))
                 .padding(.horizontal, 14)
                 .frame(height: 34)
-                .background(Color.red.opacity(0.10), in: RoundedRectangle(cornerRadius: 11))
+                .background(Color("BrandGreen").opacity(0.12), in: RoundedRectangle(cornerRadius: 11))
             }
-            Button(String(localized: "编辑")) {
-                showEditSheet = true
+
+            // 当天的饮食与训练摘要:日历不再只是体重日历
+            if let log = dayLog(for: selectedDay), !log.isEmpty {
+                Divider()
+                nutritionSummary(for: log)
+                Button {
+                    showDaySummary = true
+                } label: {
+                    HStack(spacing: 5) {
+                        Text("查看当天全部记录")
+                            .font(.system(size: 12))
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                    .foregroundStyle(Color("BrandGreen"))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .buttonStyle(.plain)
             }
-            .font(.system(size: 12))
-            .foregroundStyle(Color("BrandGreen"))
-            .padding(.horizontal, 14)
-            .frame(height: 34)
-            .background(Color("BrandGreen").opacity(0.12), in: RoundedRectangle(cornerRadius: 11))
         }
         .padding(16)
         .background(Color("CardBackground"), in: RoundedRectangle(cornerRadius: 17))
         .padding(.top, 18)
+        .sheet(isPresented: $showDaySummary) {
+            DaySummarySheet(date: selectedDay)
+        }
         .confirmationDialog(
             Text("删除这条记录?"),
             isPresented: $showDeleteConfirm,
@@ -272,6 +339,34 @@ struct CalendarView: View {
         } message: {
             Text("删除后当日将显示该日期更早的记录(若有)。")
         }
+    }
+
+    /// 当日热量宏量摘要
+    private func nutritionSummary(for log: DayLog) -> some View {
+        let totals = NutritionCalculator.totals(for: log)
+        let target = NutritionCalculator.target(on: selectedDay, in: targets, calendar: calendar)?.kcal ?? 0
+        return VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text("\(Int(totals.macros.kcal.rounded())) / \(target > 0 ? String(Int(target)) : "—") kcal")
+                    .font(.system(size: 13, design: .monospaced))
+                    .foregroundStyle(Color("TextPrimary"))
+                Spacer()
+                if totals.burnedKcal > 0 {
+                    Text("\(String(localized: "消耗")) \(Int(totals.burnedKcal))")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(Color("TextSecondary"))
+                }
+            }
+            Text("P \(StatsCalculator.format1(totals.macros.proteinG)) · F \(StatsCalculator.format1(totals.macros.fatG)) · C \(StatsCalculator.format1(totals.macros.carbG))")
+                .font(.system(size: 11, design: .monospaced))
+                .foregroundStyle(Color("TextSecondary"))
+            if totals.volumeKg > 0 {
+                Text("\(String(localized: "训练容量")) \(Int(totals.volumeKg)) kg")
+                    .font(.system(size: 11, design: .monospaced))
+                    .foregroundStyle(Color("TextSecondary"))
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     /// 删除详情栏当前显示的那一条(当日最新);同日若还有更早的记录会自动顶上来
