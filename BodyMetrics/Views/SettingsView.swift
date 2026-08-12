@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
 
 /// 分享文件包装(URL 需 Identifiable 才能用 sheet(item:))
 struct ShareItem: Identifiable {
@@ -20,6 +21,9 @@ struct SettingsView: View {
     @State private var showGoalPlanner = false
     @State private var showFoodLibrary = false
     @State private var showExerciseLibrary = false
+    @State private var showAIExport = false
+    @State private var showImporter = false
+    @State private var showWipeConfirm = false
     @State private var showGoalEditor = false
     @State private var goalText = ""
     @State private var showHeightEditor = false
@@ -215,14 +219,77 @@ struct SettingsView: View {
                     groupTitle("数据与隐私")
                     VStack(spacing: 0) {
                         Button {
+                            showAIExport = true
+                        } label: {
+                            HStack(spacing: 11) {
+                                roundIcon("sparkles", pale: false)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("导出给 AI 分析")
+                                        .font(.system(size: 14))
+                                    Text("含体重、饮食、训练与实测代谢")
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(Color("TextSecondary"))
+                                }
+                                Spacer()
+                                chevron
+                            }
+                            .frame(minHeight: 64)
+                            .padding(.horizontal, 14)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        Divider().padding(.leading, 57)
+                        Button {
+                            exportBackup()
+                        } label: {
+                            HStack(spacing: 11) {
+                                roundIcon("arrow.down.doc", pale: true)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("导出完整备份")
+                                        .font(.system(size: 14))
+                                    Text("数据只存在这台设备,建议定期备份")
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(Color("TextSecondary"))
+                                }
+                                Spacer()
+                                chevron
+                            }
+                            .frame(minHeight: 64)
+                            .padding(.horizontal, 14)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        Divider().padding(.leading, 57)
+                        Button {
+                            showImporter = true
+                        } label: {
+                            HStack(spacing: 11) {
+                                roundIcon("arrow.up.doc", pale: true)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("导入备份")
+                                        .font(.system(size: 14))
+                                    Text("会先清空当前数据再恢复")
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(Color("TextSecondary"))
+                                }
+                                Spacer()
+                                chevron
+                            }
+                            .frame(minHeight: 64)
+                            .padding(.horizontal, 14)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        Divider().padding(.leading, 57)
+                        Button {
                             exportCSV()
                         } label: {
                             HStack(spacing: 11) {
-                                roundIcon("square.and.arrow.up", pale: true)
+                                roundIcon("tablecells", pale: true)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("导出 CSV")
                                         .font(.system(size: 14))
-                                    Text("导出全部体重记录")
+                                    Text("体重与每日饮食两份")
                                         .font(.system(size: 11))
                                         .foregroundStyle(Color("TextSecondary"))
                                 }
@@ -254,8 +321,36 @@ struct SettingsView: View {
                         }
                         .frame(minHeight: 64)
                         .padding(.horizontal, 14)
+                        Divider().padding(.leading, 57)
+                        Button {
+                            showWipeConfirm = true
+                        } label: {
+                            HStack(spacing: 11) {
+                                roundIcon("trash", pale: true)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("清空全部数据")
+                                        .font(.system(size: 14))
+                                        .foregroundStyle(Color.red.opacity(0.9))
+                                    Text("不可撤销,建议先导出备份")
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(Color("TextSecondary"))
+                                }
+                                Spacer()
+                            }
+                            .frame(minHeight: 64)
+                            .padding(.horizontal, 14)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
                     }
                     .card()
+
+                    Text("schema v\(BackupService.formatVersion) · \(dayLogCount) 天记录")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color("TextSecondary"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 22)
+                        .opacity(0.7)
                 }
                 .padding(.horizontal, 18)
                 .padding(.bottom, 24)
@@ -294,6 +389,25 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showExerciseLibrary) {
             ExerciseLibraryView()
+        }
+        .sheet(isPresented: $showAIExport) {
+            AIExportView()
+        }
+        .fileImporter(isPresented: $showImporter, allowedContentTypes: [.json]) { result in
+            handleImport(result)
+        }
+        .confirmationDialog(
+            Text("清空全部数据?"),
+            isPresented: $showWipeConfirm,
+            titleVisibility: .visible
+        ) {
+            Button(String(localized: "清空"), role: .destructive) {
+                BackupService.wipe(context)
+                showToastMessage(String(localized: "已清空"))
+            }
+            Button(String(localized: "取消"), role: .cancel) {}
+        } message: {
+            Text("此操作不可撤销,建议先导出备份。")
         }
         .sheet(item: $shareItem) { item in
             ShareSheet(items: [item.url]) {
@@ -343,10 +457,10 @@ struct SettingsView: View {
     }
 
     /// 按一天内时间排序的提醒时间
-    private var reminderTimes: [(id: UUID, hour: Int, minute: Int)] {
+    private var reminderTimes: [(id: UUID, hour: Int, minute: Int, kind: ReminderKind)] {
         reminders
             .sorted { $0.minutesOfDay < $1.minutesOfDay }
-            .map { (id: $0.id, hour: $0.hour, minute: $0.minute) }
+            .map { (id: $0.id, hour: $0.hour, minute: $0.minute, kind: $0.kind) }
     }
 
     /// 副标题:最多列出 3 个时间,更多则加省略
@@ -443,9 +557,55 @@ struct SettingsView: View {
         try? context.save()
     }
 
+    private var dayLogCount: Int {
+        (try? context.fetchCount(FetchDescriptor<DayLog>())) ?? 0
+    }
+
     private func exportCSV() {
-        guard let url = CSVExporter.exportWeightCSV(from: entries) else { return }
+        guard let url = CSVExporter.exportCombinedCSV(
+            entries: entries,
+            dayLogs: (try? context.fetch(FetchDescriptor<DayLog>())) ?? [],
+            targets: targets
+        ) else { return }
         shareItem = ShareItem(url: url)
+    }
+
+    private func exportBackup() {
+        let json = BackupService.exportJSON(from: context)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("bodymetrics-backup-\(formatter.string(from: .now)).json")
+        do {
+            try json.write(to: url, atomically: true, encoding: .utf8)
+            shareItem = ShareItem(url: url)
+        } catch {
+            showToastMessage(String(localized: "导出失败"))
+        }
+    }
+
+    private func handleImport(_ result: Result<URL, Error>) {
+        guard case .success(let url) = result else {
+            showToastMessage(String(localized: "没有选择文件"))
+            return
+        }
+        // 文件来自文件 App,必须先取得安全作用域访问权限
+        let needsScope = url.startAccessingSecurityScopedResource()
+        defer { if needsScope { url.stopAccessingSecurityScopedResource() } }
+
+        guard let text = try? String(contentsOf: url, encoding: .utf8) else {
+            showToastMessage(String(localized: "无法读取文件"))
+            return
+        }
+        switch BackupService.importJSON(text, into: context) {
+        case .restored(let days, let entries):
+            showToastMessage(String(localized: "已恢复 \(days) 天记录、\(entries) 条体重"))
+        case .prototypeSummaryOnly(let days):
+            showToastMessage(String(localized: "分析包只含汇总,仅恢复了 \(days) 天的备注"))
+        case .failed(let reason):
+            showToastMessage(reason)
+        }
     }
 
     private func showToastMessage(_ text: String) {

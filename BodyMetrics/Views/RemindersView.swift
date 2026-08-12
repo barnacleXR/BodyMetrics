@@ -156,7 +156,7 @@ struct RemindersView: View {
     }
 
     private func syncNotifications() {
-        let times = sortedReminders.map { (id: $0.id, hour: $0.hour, minute: $0.minute) }
+        let times = sortedReminders.map { (id: $0.id, hour: $0.hour, minute: $0.minute, kind: $0.kind) }
         let enabled = profile?.reminderEnabled ?? true
         Task { await NotificationService.sync(times: times, enabled: enabled) }
     }

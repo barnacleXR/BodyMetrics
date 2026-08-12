@@ -44,7 +44,7 @@ struct BodyMetricsApp: App {
         let enabled = (try? context.fetch(FetchDescriptor<UserProfile>()))?.first?.reminderEnabled ?? true
         let times = reminders
             .sorted { $0.minutesOfDay < $1.minutesOfDay }
-            .map { (id: $0.id, hour: $0.hour, minute: $0.minute) }
+            .map { (id: $0.id, hour: $0.hour, minute: $0.minute, kind: $0.kind) }
         Task { await NotificationService.sync(times: times, enabled: enabled) }
     }
 }
