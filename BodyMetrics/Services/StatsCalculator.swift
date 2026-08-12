@@ -84,6 +84,32 @@ enum StatsCalculator {
         return min(max((first.value - current) / denominator, 0), 1)
     }
 
+    // MARK: - 与能量收支层的桥接
+
+    /// 体重记录 → 纯值样本(供 EnergyBalanceService 使用,那一层不依赖 SwiftData)
+    static func weightSamples(from entries: [MetricEntry]) -> [WeightSample] {
+        entries
+            .filter { $0.metric == .weight }
+            .map { WeightSample(date: $0.date, kg: $0.value) }
+    }
+
+    /// 截至某日往前 n 天的体重移动平均(按日取最新一条)。
+    /// 单日体重的水分波动可达 ±1 kg,凡是要"比较两个时间点的体重"的地方都必须走这里
+    static func trailingAverage(
+        days: Int,
+        endingOn day: Date,
+        in entries: [MetricEntry],
+        calendar: Calendar = .current
+    ) -> Double? {
+        let end = calendar.startOfDay(for: day)
+        guard days > 0, let start = calendar.date(byAdding: .day, value: -(days - 1), to: end) else { return nil }
+        let window = weightSamples(from: entries).filter {
+            let d = calendar.startOfDay(for: $0.date)
+            return d >= start && d <= end
+        }
+        return EnergyBalanceService.dailyLatestMean(window, calendar: calendar)
+    }
+
     // MARK: - BMI
 
     /// BMI = 体重(kg) ÷ (身高 m)²

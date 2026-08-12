@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>饮食健身打卡</title>
+<style>
+:root{
+  --page:#DFE7E1;
+  --card:rgba(255,255,255,.8);
+  --card-solid:#FFFFFF;
+  --brand:#258257;
+  --brand-soft:rgba(37,130,87,.13);
+  --brand-ink:#1B5E3F;
+  --hero-a:#246347;
+  --hero-b:#3F9B68;
+  --hero-shadow:rgba(37,130,87,.22);
+  --on-hero:#FFFFFF;
+  --on-hero-2:rgba(255,255,255,.85);
+  --on-hero-track:rgba(255,255,255,.22);
+  --on-hero-div:rgba(255,255,255,.18);
+  --text:#17231E;
+  --text-2:#5A6A60;
+  --divider:rgba(110,126,116,.16);
+  --field:#FFFFFF;
+  --field-ink:#17231E;
+  --field-border:rgba(110,126,116,.28);
+  --warn:#BA7517;
+  --warn-soft:rgba(186,117,23,.13);
+  --danger:#A32D2D;
+  --danger-soft:rgba(163,45,45,.12);
+  --on-brand:#FFFFFF;
+  --tabbar:#EFF4F0;
+  --sheet:#EDF2EE;
+  --scrim:rgba(23,35,30,.42);
+  --r-hero:25px; --r-card:17px; --r-btn:15px; --r-tile:11px; --r-chip:9px;
+  --font:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --app-w:430px;
+}
+[data-theme="dark"]{
+  --page:#101613;
+  --card:rgba(30,39,35,.8);
+  --card-solid:#1E2723;
+  --brand:#3FA97C;
+  --brand-soft:rgba(63,169,124,.16);
+  --brand-ink:#9FE1CB;
+  --hero-a:#1C4A39;
+  --hero-b:#2F7C52;
+  --hero-shadow:rgba(0,0,0,.4);
+  --on-hero:#FFFFFF;
+  --on-hero-2:rgba(255,255,255,.82);
+  --on-hero-track:rgba(255,255,255,.18);
+  --on-hero-div:rgba(255,255,255,.16);
+  --text:#E7EEE9;
+  --text-2:#9BA9A0;
+  --divider:rgba(155,169,160,.16);
+  --field:#161D19;
+  --field-ink:#E7EEE9;
+  --field-border:rgba(155,169,160,.24);
+  --warn:#EF9F27;
+  --warn-soft:rgba(239,159,39,.15);
+  --danger:#F09595;
+  --danger-soft:rgba(240,149,149,.14);
+  --on-brand:#0B1410;
+  --tabbar:#161D19;
+  --sheet:#161D19;
+  --scrim:rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--page);color:var(--text);font-family:var(--font)}
+body{overscroll-behavior-y:none}
+#root{min-height:100vh}
+.app{max-width:var(--app-w);margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;background:var(--page)}
+@media(min-width:640px){
+  body{background:var(--page)}
+  .app{box-shadow:0 0 0 1px var(--divider)}
+}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 18px 24px}
+.actionbar{flex:0 0 auto;padding:10px 18px;background:var(--page);border-top:1px solid var(--divider)}
+.hd{display:flex;align-items:flex-end;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 21px 17px}
+.hd-eyebrow{font-size:12px;color:var(--text-2);margin-bottom:3px}
+.hd-title{font-size:34px;font-weight:700;letter-spacing:-1px;line-height:1.05;margin:0}
+.iconbtn{width:44px;height:44px;border:0;background:none;padding:0;display:flex;align-items:center;justify-content:center;color:var(--brand);cursor:pointer}
+.iconbtn>span{width:37px;height:37px;border-radius:50%;background:var(--brand-soft);display:flex;align-items:center;justify-content:center}
+.iconbtn.pale{color:var(--text-2)}
+.iconbtn:disabled{opacity:.3;cursor:default}
+.iconbtn.pale>span{background:var(--page)}
+.sec{margin-top:22px}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;padding:0 11px 7px}
+.sec-t{font-size:13px;color:var(--text-2)}
+.linkbtn{border:0;background:none;font-size:12px;color:var(--brand);cursor:pointer;padding:0;font-family:inherit}
+.card{background:var(--card);border-radius:var(--r-card)}
+.row{display:flex;align-items:center;gap:11px;padding:0 14px;min-height:64px}
+.row-tight{min-height:52px}
+.rowdiv{height:1px;background:var(--divider);margin-left:57px}
+.rowbtn{display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;font-family:inherit;text-align:left;cursor:pointer;color:inherit;padding:0 14px}
+.rowbtn:hover{background:var(--brand-soft)}
+.subrow{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;font-family:inherit;text-align:left;cursor:pointer;color:inherit;padding:9px 14px 9px 57px;font-size:13px}
+.subrow:hover{background:var(--brand-soft)}
+.rowdiv.full{margin-left:0}
+.tile{width:32px;height:32px;border-radius:var(--r-tile);display:flex;align-items:center;justify-content:center;background:var(--brand-soft);color:var(--brand);flex:0 0 auto}
+.tile.pale{background:var(--page);color:var(--text-2)}
+.rt{font-size:14px;color:var(--text)}
+.rs{font-size:11px;color:var(--text-2);margin-top:2px}
+.rv{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px;color:var(--text);margin-left:auto}
+.grow{flex:1;min-width:0}
+.trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero{border-radius:var(--r-hero);padding:22px;background:linear-gradient(135deg,var(--hero-a),var(--hero-b));box-shadow:0 6px 12px var(--hero-shadow);color:var(--on-hero)}
+.hero-l{font-size:13px;color:var(--on-hero-2)}
+.hero-n{font-size:56px;font-weight:500;font-family:var(--mono);font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-2px}
+.hero-u{font-size:18px;color:var(--on-hero-2)}
+.hero-m{font-size:11px;font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--on-hero-2);margin-left:auto}
+.hero-div{height:1px;background:var(--on-hero-div);margin:12px 0}
+.bar-hd{display:flex;justify-content:space-between;font-size:11px;color:var(--on-hero-2);margin-bottom:4px}
+.bar-hd .n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.bar{height:4px;border-radius:2px;background:var(--on-hero-track);position:relative;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:2px;background:var(--on-hero);transition:width .25s ease}
+.bar>i.over{background:var(--warn)}
+.bar>u{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--on-hero);opacity:.9;border-radius:1px}
+.btn{width:100%;height:49px;border:0;border-radius:var(--r-btn);background:var(--brand);color:var(--on-brand);font-size:16px;font-weight:600;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.ghost{background:var(--card);color:var(--text);height:44px;font-size:14px;font-weight:500}
+.btn.danger{background:var(--danger-soft);color:var(--danger)}
+.btn.sm{height:38px;font-size:13px;border-radius:var(--r-tile)}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--brand-soft);color:var(--brand-ink);font-size:12px;padding:6px 10px;border-radius:var(--r-chip);border:0;font-family:inherit;cursor:pointer}
+.chip.out{background:none;border:1px dashed var(--field-border);color:var(--text-2)}
+.chip.plain{background:var(--page);color:var(--text)}
+.seg{display:flex;gap:2px;background:var(--page);border-radius:var(--r-tile);padding:2px}
+.seg>button{flex:1;height:32px;border:0;background:none;border-radius:9px;font-size:13px;color:var(--text-2);font-family:inherit;cursor:pointer}
+.seg>button[aria-pressed="true"]{background:var(--card-solid);color:var(--text);font-weight:500}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--field-ink);background:var(--field);border:1px solid var(--field-border);border-radius:var(--r-tile);padding:0 11px;height:40px;width:100%;outline:none}
+textarea{height:auto;padding:10px 11px;line-height:1.6;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+input.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+input::placeholder,textarea::placeholder{color:var(--text-2)}
+.fl{display:block;font-size:12px;color:var(--text-2);margin-bottom:6px}
+.fg{margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tabbar{position:sticky;bottom:0;display:flex;background:var(--tabbar);border-top:1px solid var(--divider);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar>button{flex:1;border:0;background:none;padding:8px 0 7px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-2);font-size:10px;font-family:inherit;cursor:pointer}
+.tabbar>button[aria-current="page"]{color:var(--brand)}
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:var(--app-w);background:var(--sheet);border-radius:22px 22px 0 0;max-height:92vh;display:flex;flex-direction:column;animation:up .22s ease}
+@keyframes up{from{transform:translateY(14px);opacity:.6}to{transform:none;opacity:1}}
+.sheet-hd{padding:12px 23px 0;flex:0 0 auto}
+.grip{width:37px;height:5px;border-radius:3px;background:var(--divider);margin:0 auto 14px}
+.sheet-t{font-size:24px;font-weight:700;letter-spacing:-.5px;margin:0}
+.sheet-body{overflow-y:auto;padding:14px 23px calc(20px + env(safe-area-inset-bottom))}
+.closebtn{width:44px;height:44px;border:0;background:none;padding:0;display:flex;align-items:center;justify-content:center;color:var(--text-2);cursor:pointer;margin-right:-10px}
+.closebtn>span{width:30px;height:30px;border-radius:50%;background:var(--page);display:flex;align-items:center;justify-content:center}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-h{font-size:10px;color:var(--text-2);text-align:center;padding-bottom:4px}
+.cald{aspect-ratio:1;border:0;background:none;border-radius:10px;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12px;color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:0}
+.cald:disabled{color:var(--text-2);opacity:.35;cursor:default}
+.cald.today{outline:1.5px solid var(--brand);outline-offset:-1.5px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--brand)}
+.dot.warn{background:var(--warn)}
+.dot.empty{background:transparent}
+.stat{background:var(--card);border-radius:var(--r-card);padding:13px 14px}
+.stat-l{font-size:11px;color:var(--text-2)}
+.stat-v{font-size:22px;font-family:var(--mono);font-variant-numeric:tabular-nums;margin-top:3px}
+.spark{display:flex;align-items:flex-end;gap:3px;height:44px;margin-top:10px;position:relative}
+.spark-goal{position:absolute;left:0;right:0;height:0;border-top:1px dashed var(--text-2);opacity:.65;pointer-events:none}
+.spark>i{flex:1;background:var(--brand-soft);border-radius:2px 2px 0 0;min-height:2px}
+.spark>i.hit{background:var(--brand)}
+.empty{text-align:center;color:var(--text-2);font-size:13px;padding:26px 12px;line-height:1.7}
+.hintbtn{display:flex;align-items:center;gap:9px;width:100%;border:1px dashed var(--field-border);background:none;border-radius:var(--r-card);padding:13px 14px;font-family:inherit;font-size:13px;color:var(--text-2);cursor:pointer;text-align:left}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + env(safe-area-inset-bottom));background:var(--text);color:var(--page);font-size:13px;padding:10px 16px;border-radius:var(--r-btn);z-index:60;animation:up .2s ease;display:flex;align-items:center;gap:12px;max-width:calc(100% - 36px)}
+.toast>button{border:0;background:none;color:var(--brand);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:0;flex:0 0 auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  :root{--card:#fff;--page:#fff}
+  .tabbar,.iconbtn,.btn,.scrim{display:none!important}
+  .app{max-width:none;box-shadow:none}
+  .hero{background:#246347!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div id="root"><div class="empty" style="padding-top:40vh">加载中…</div></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js" crossorigin></script>
+<script>
+/* ===========================================================
+   core.js — 纯逻辑层，不依赖 DOM / React
+   迁移到 Vite 时本文件原样保留，只需改为 ES module export
+   =========================================================== */
+(function (global) {
+  'use strict';
+
+  var SCHEMA_VERSION = 3;
+  var STORAGE_KEY = 'dietlog.v1';
+
+  /* ---------- 常量 ---------- */
+
+  var MEAL_TYPES = [
+    { id: 'breakfast', label: '早餐' },
+    { id: 'lunch', label: '午餐' },
+    { id: 'dinner', label: '晚餐' },
+    { id: 'snack', label: '加餐' }
+  ];
+
+  var ACTIVITY_LEVELS = [
+    { id: 'sedentary', label: '久坐（默认）', factor: 1.2 },
+    { id: 'light', label: '轻度活动', factor: 1.375 },
+    { id: 'moderate', label: '中度活动', factor: 1.55 },
+    { id: 'active', label: '高度活动', factor: 1.725 }
+  ];
+
+  /* 力量动作库（精简自 free-exercise-db 的常见动作） */
+  var STRENGTH_DB = [
+    { id: 'bench-press', zh: '卧推', group: '胸' },
+    { id: 'incline-bench', zh: '上斜卧推', group: '胸' },
+    { id: 'db-bench', zh: '哑铃卧推', group: '胸' },
+    { id: 'chest-fly', zh: '飞鸟', group: '胸' },
+    { id: 'push-up', zh: '俯卧撑', group: '胸' },
+    { id: 'dip', zh: '双杠臂屈伸', group: '胸' },
+    { id: 'pull-up', zh: '引体向上', group: '背' },
+    { id: 'lat-pulldown', zh: '高位下拉', group: '背' },
+    { id: 'barbell-row', zh: '杠铃划船', group: '背' },
+    { id: 'db-row', zh: '单臂哑铃划船', group: '背' },
+    { id: 'seated-row', zh: '坐姿划船', group: '背' },
+    { id: 'deadlift', zh: '硬拉', group: '背' },
+    { id: 'romanian-dl', zh: '罗马尼亚硬拉', group: '腿' },
+    { id: 'squat', zh: '深蹲', group: '腿' },
+    { id: 'front-squat', zh: '前蹲', group: '腿' },
+    { id: 'leg-press', zh: '腿举', group: '腿' },
+    { id: 'lunge', zh: '弓步蹲', group: '腿' },
+    { id: 'leg-extension', zh: '腿屈伸', group: '腿' },
+    { id: 'leg-curl', zh: '腿弯举', group: '腿' },
+    { id: 'calf-raise', zh: '提踵', group: '腿' },
+    { id: 'hip-thrust', zh: '臀推', group: '腿' },
+    { id: 'ohp', zh: '站姿推举', group: '肩' },
+    { id: 'db-shoulder-press', zh: '哑铃肩推', group: '肩' },
+    { id: 'lateral-raise', zh: '侧平举', group: '肩' },
+    { id: 'front-raise', zh: '前平举', group: '肩' },
+    { id: 'rear-delt-fly', zh: '反向飞鸟', group: '肩' },
+    { id: 'shrug', zh: '耸肩', group: '肩' },
+    { id: 'barbell-curl', zh: '杠铃弯举', group: '手臂' },
+    { id: 'db-curl', zh: '哑铃弯举', group: '手臂' },
+    { id: 'hammer-curl', zh: '锤式弯举', group: '手臂' },
+    { id: 'tricep-pushdown', zh: '三头下压', group: '手臂' },
+    { id: 'skullcrusher', zh: '仰卧臂屈伸', group: '手臂' },
+    { id: 'plank', zh: '平板支撑', group: '核心' },
+    { id: 'crunch', zh: '卷腹', group: '核心' },
+    { id: 'hanging-leg-raise', zh: '悬垂举腿', group: '核心' },
+    { id: 'cable-woodchop', zh: '绳索转体', group: '核心' }
+  ];
+
+  var CARDIO_DB = [
+    { id: 'run-outdoor', zh: '跑步（户外）' },
+    { id: 'run-treadmill', zh: '跑步机' },
+    { id: 'walk', zh: '快走' },
+    { id: 'cycling', zh: '骑行' },
+    { id: 'stationary-bike', zh: '动感单车' },
+    { id: 'elliptical', zh: '椭圆机' },
+    { id: 'rowing', zh: '划船机' },
+    { id: 'stair-climber', zh: '爬楼机' },
+    { id: 'swimming', zh: '游泳' },
+    { id: 'jump-rope', zh: '跳绳' },
+    { id: 'hiit', zh: 'HIIT' },
+    { id: 'other-cardio', zh: '其他有氧' }
+  ];
+
+  /* ---------- 工具 ---------- */
+
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+  /** 本地日期 -> 'YYYY-MM-DD'（不用 toISOString，避免 UTC 偏移） */
+  function dateKey(d) {
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  }
+
+  function todayKey() { return dateKey(new Date()); }
+
+  function parseKey(key) {
+    var p = key.split('-');
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
+
+  function addDays(key, n) {
+    var d = parseKey(key);
+    d.setDate(d.getDate() + n);
+    return dateKey(d);
+  }
+
+  function num(v, fallback) {
+    var n = parseFloat(v);
+    return isFinite(n) ? n : (fallback === undefined ? 0 : fallback);
+  }
+
+  function round(v, digits) {
+    var m = Math.pow(10, digits || 0);
+    return Math.round(v * m) / m;
+  }
+
+  /* ---------- 营养 / 训练计算 ---------- */
+
+  /** Mifflin-St Jeor 基础代谢率 */
+  function bmr(sex, weightKg, heightCm, age) {
+    if (!weightKg || !heightCm || !age) return 0;
+    var base = 10 * weightKg + 6.25 * heightCm - 5 * age;
+    return Math.round(sex === 'female' ? base - 161 : base + 5);
+  }
+
+  function activityFactor(id) {
+    for (var i = 0; i < ACTIVITY_LEVELS.length; i++) {
+      if (ACTIVITY_LEVELS[i].id === id) return ACTIVITY_LEVELS[i].factor;
+    }
+    return 1.2;
+  }
+
+  function profileComplete(profile) {
+    return !!(profile && num(profile.weightKg) > 0 && num(profile.heightCm) > 0 && num(profile.birthYear) > 1900);
+  }
+
+  function tdee(profile) {
+    var age = profile.birthYear ? new Date().getFullYear() - profile.birthYear : 0;
+    var b = bmr(profile.sex, num(profile.weightKg), num(profile.heightCm), age);
+    return Math.round(b * activityFactor(profile.activityLevel));
+  }
+
+  /** 由 TDEE 推荐一组宏量目标：蛋白 1.6g/kg，脂肪占 25% 热量，碳水补足 */
+  function suggestTargets(profile, kcalOverride) {
+    var kcal = kcalOverride || tdee(profile);
+    var w = num(profile.weightKg);
+    var proteinG = Math.round(w * 1.6);
+    var fatG = Math.round((kcal * 0.25) / 9);
+    var carbG = Math.round(Math.max(0, kcal - proteinG * 4 - fatG * 9) / 4);
+    return { kcal: kcal, proteinG: proteinG, fatG: fatG, carbG: carbG };
+  }
+
+  /** 取在指定日期生效的目标（targets 按 effectiveFrom 升序） */
+  function targetForDate(targets, key) {
+    var chosen = null;
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i].effectiveFrom <= key) chosen = targets[i];
+    }
+    return chosen || targets[targets.length - 1] || null;
+  }
+
+  /** 单条食物在给定份量下的营养 */
+  function scaleFood(item) {
+    var factor = item.basis === 'per100g' ? num(item.amount) / 100 : num(item.amount);
+    return {
+      kcal: num(item.kcal) * factor,
+      p: num(item.p) * factor,
+      f: num(item.f) * factor,
+      c: num(item.c) * factor
+    };
+  }
+
+  /** Epley 一次最大重量估算 */
+  function e1rm(weightKg, reps) {
+    if (!weightKg || !reps) return 0;
+    if (reps === 1) return weightKg;
+    return Math.round(weightKg * (1 + reps / 30));
+  }
+
+  function setVolume(sets) {
+    var v = 0;
+    for (var i = 0; i < sets.length; i++) {
+      if (sets[i].warmup) continue;
+      v += num(sets[i].reps) * num(sets[i].weightKg);
+    }
+    return Math.round(v);
+  }
+
+  function bestE1rm(sets) {
+    var best = 0;
+    for (var i = 0; i < sets.length; i++) {
+      if (sets[i].warmup) continue;
+      var e = e1rm(num(sets[i].weightKg), num(sets[i].reps));
+      if (e > best) best = e;
+    }
+    return best;
+  }
+
+  var EMPTY_DAY = { meals: [], strength: [], cardio: [], note: '' };
+
+  function getDay(state, key) {
+    var d = state.days[key];
+    if (!d) return { meals: [], strength: [], cardio: [], note: '' };
+    return {
+      meals: d.meals || [],
+      strength: d.strength || [],
+      cardio: d.cardio || [],
+      note: d.note || ''
+    };
+  }
+
+  function dayIsEmpty(day) {
+    return !day.meals.length && !day.strength.length && !day.cardio.length;
+  }
+
+  /** 当日汇总：摄入 / 消耗 */
+  function dayTotals(day) {
+    var t = { kcal: 0, p: 0, f: 0, c: 0, burned: 0, volume: 0 };
+    for (var i = 0; i < day.meals.length; i++) {
+      var items = day.meals[i].items || [];
+      for (var j = 0; j < items.length; j++) {
+        var s = scaleFood(items[j]);
+        t.kcal += s.kcal; t.p += s.p; t.f += s.f; t.c += s.c;
+      }
+    }
+    for (var k = 0; k < day.cardio.length; k++) t.burned += num(day.cardio[k].kcalBurned);
+    for (var m = 0; m < day.strength.length; m++) {
+      t.burned += num(day.strength[m].kcalBurned);
+      t.volume += setVolume(day.strength[m].sets || []);
+    }
+    t.kcal = Math.round(t.kcal);
+    t.p = round(t.p, 1); t.f = round(t.f, 1); t.c = round(t.c, 1);
+    t.burned = Math.round(t.burned);
+    return t;
+  }
+
+  /**
+   * 剩余额度。addBurnedToBudget=false 时训练消耗不回补，
+   * 因为活动系数已经包含日常活动，回补会双重计算。
+   */
+  function remaining(totals, target, addBurnedToBudget, draftTotals) {
+    if (!target) target = { kcal: 0, proteinG: 0, fatG: 0, carbG: 0 };
+    var d = draftTotals || { kcal: 0, p: 0, f: 0, c: 0 };
+    var budget = num(target.kcal) + (addBurnedToBudget ? totals.burned : 0);
+    return {
+      budget: Math.round(budget),
+      kcal: Math.round(budget - totals.kcal - d.kcal),
+      p: round(num(target.proteinG) - totals.p - d.p, 1),
+      f: round(num(target.fatG) - totals.f - d.f, 1),
+      c: round(num(target.carbG) - totals.c - d.c, 1)
+    };
+  }
+
+  /** 试算购物车汇总（不落盘） */
+  function draftTotals(items) {
+    var t = { kcal: 0, p: 0, f: 0, c: 0 };
+    for (var i = 0; i < items.length; i++) {
+      var s = scaleFood(items[i]);
+      t.kcal += s.kcal; t.p += s.p; t.f += s.f; t.c += s.c;
+    }
+    t.kcal = Math.round(t.kcal);
+    t.p = round(t.p, 1); t.f = round(t.f, 1); t.c = round(t.c, 1);
+    return t;
+  }
+
+  /** 连续打卡天数：今天没记录时从昨天起算，允许当天还没开始记 */
+  function streak(state) {
+    var key = todayKey();
+    if (dayIsEmpty(getDay(state, key))) key = addDays(key, -1);
+    var n = 0;
+    while (!dayIsEmpty(getDay(state, key)) && n < 3650) {
+      n++;
+      key = addDays(key, -1);
+    }
+    return n;
+  }
+
+
+  /* ---------- 动作库 ---------- */
+
+  /** 可选动作 = 内置（未隐藏）+ 自定义。UI 层统一走这里，避免各表单各写一套 */
+  function exerciseList(state, kind) {
+    var builtin = kind === 'cardio' ? CARDIO_DB : STRENGTH_DB;
+    var hidden = state.hiddenExerciseIds || [];
+    var out = (state.customExercises || [])
+      .filter(function (e) { return e.kind === kind; })
+      .map(function (e) { return { id: e.id, zh: e.zh, group: e.group || '自定义', custom: true }; });
+    for (var i = 0; i < builtin.length; i++) {
+      if (hidden.indexOf(builtin[i].id) === -1) {
+        out.push({ id: builtin[i].id, zh: builtin[i].zh, group: builtin[i].group || '有氧', custom: false });
+      }
+    }
+    return out;
+  }
+
+  function isKnownExercise(state, name, kind) {
+    var builtin = kind === 'cardio' ? CARDIO_DB : STRENGTH_DB;
+    for (var i = 0; i < builtin.length; i++) if (builtin[i].zh === name) return true;
+    var custom = state.customExercises || [];
+    for (var j = 0; j < custom.length; j++) {
+      if (custom[j].kind === kind && custom[j].zh === name) return true;
+    }
+    return false;
+  }
+
+  /**
+   * 记录一个新动作名时把它存进自定义库，否则下次搜不到、要重打全名。
+   * 返回新的 state（未变化时返回原引用）。
+   */
+  function ensureExercise(state, name, kind, group) {
+    name = (name || '').trim();
+    if (!name || isKnownExercise(state, name, kind)) return state;
+    var entry = { id: 'c-' + uid(), zh: name, kind: kind, group: group || (kind === 'cardio' ? '有氧' : '自定义') };
+    return Object.assign({}, state, { customExercises: (state.customExercises || []).concat([entry]) });
+  }
+
+  /**
+   * 改名同时改写历史记录里的动作名。
+   * 记录里存的是名字字符串，不同步的话同一个动作会在统计里裂成两条。
+   */
+  function renameExercise(state, kind, oldName, newName) {
+    oldName = (oldName || '').trim();
+    newName = (newName || '').trim();
+    if (!newName || oldName === newName) return state;
+
+    var custom = (state.customExercises || []).map(function (e) {
+      return (e.kind === kind && e.zh === oldName) ? Object.assign({}, e, { zh: newName }) : e;
+    });
+
+    var field = kind === 'cardio' ? 'cardio' : 'strength';
+    var days = {};
+    Object.keys(state.days).forEach(function (key) {
+      var d = state.days[key];
+      var list = d[field] || [];
+      var touched = false;
+      var next = list.map(function (w) {
+        if (w.name !== oldName) return w;
+        touched = true;
+        return Object.assign({}, w, { name: newName });
+      });
+      days[key] = touched ? Object.assign({}, d, (function () { var o = {}; o[field] = next; return o; })()) : d;
+    });
+
+    return Object.assign({}, state, { customExercises: custom, days: days });
+  }
+
+  /* ---------- 存储 ---------- */
+
+  function defaultState() {
+    return {
+      schemaVersion: SCHEMA_VERSION,
+      // 不编造身高体重：假默认值会让 TDEE 和目标全部失真，而界面上看不出来
+      profile: { sex: 'male', birthYear: null, heightCm: null, weightKg: null, activityLevel: 'sedentary' },
+      settings: { theme: 'auto', addBurnedToBudget: false, onboarded: false },
+      targets: [],
+      foodPresets: [],
+      customExercises: [],
+      hiddenExerciseIds: [],
+      days: {},
+      aiReports: []
+    };
+  }
+
+  /** 向前兼容：补齐缺失字段，未来加 schemaVersion 分支即可 */
+  function migrate(raw) {
+    var base = defaultState();
+    if (!raw || typeof raw !== 'object') return base;
+    var targets = (raw.targets && raw.targets.length) ? raw.targets.slice().sort(function (a, b) {
+      return a.effectiveFrom < b.effectiveFrom ? -1 : 1;
+    }) : base.targets;
+    var settings = Object.assign(base.settings, raw.settings || {});
+    // v2 及更早没有 onboarded 字段：已经有目标就视为设置过，别拿引导页拦老用户
+    if (raw.settings && raw.settings.onboarded === undefined) settings.onboarded = targets.length > 0;
+    if (!raw.settings) settings.onboarded = targets.length > 0;
+
+    return {
+      schemaVersion: SCHEMA_VERSION,
+      profile: Object.assign(base.profile, raw.profile || {}),
+      settings: settings,
+      targets: targets,
+      foodPresets: raw.foodPresets || [],
+      customExercises: raw.customExercises || [],
+      hiddenExerciseIds: raw.hiddenExerciseIds || [],
+      days: raw.days || {},
+      aiReports: raw.aiReports || []
+    };
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      return migrate(JSON.parse(raw));
+    } catch (e) {
+      return defaultState();
+    }
+  }
+
+  function save(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /* ---------- 导出 ---------- */
+
+  var DEFAULT_PROMPT =
+    '以下是我的饮食与训练打卡数据（JSON）。请分析：\n' +
+    '1. 热量与三大宏量的达成情况，指出偏差最大的项\n' +
+    '2. 蛋白质摄入是否足够支撑训练量\n' +
+    '3. 训练容量的变化趋势与恢复风险\n' +
+    '4. 给出 3 条具体可执行的调整建议\n' +
+    '注意：kcalBurned 字段的 source 若为 device，误差可达 ±25%，请勿当作精确值参与能量平衡计算。';
+
+  var DAY_PROMPT =
+    '以下是我某一天的饮食与训练记录（JSON）。请分析：\n' +
+    '1. 这一天的热量与三大宏量相对目标的缺口，指出偏差最大的项\n' +
+    '2. 三餐的蛋白质分配是否合理\n' +
+    '3. 如果还没吃完，建议接下来吃什么能补齐缺口\n' +
+    '4. 指出这一天最值得改的一个点\n' +
+    '注意：kcalBurned 字段的 source 若为 device，误差可达 ±25%，请勿当作精确值参与能量平衡计算。';
+
+  function exportPayload(state, fromKey, toKey, prompt) {
+    var keys = Object.keys(state.days).filter(function (k) {
+      return k >= fromKey && k <= toKey;
+    }).sort();
+
+    var days = [];
+    var sumKcal = 0, sumP = 0, hitKcal = 0, counted = 0;
+
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      var day = getDay(state, key);
+      if (dayIsEmpty(day)) continue;
+      var t = dayTotals(day);
+      var target = targetForDate(state.targets, key);
+      var meals = day.meals.map(function (m) {
+        return {
+          type: m.type,
+          items: (m.items || []).map(function (it) {
+            var s = scaleFood(it);
+            return {
+              name: it.name,
+              amount: num(it.amount),
+              unit: it.basis === 'per100g' ? 'g' : (it.servingLabel || 'serving'),
+              kcal: Math.round(s.kcal),
+              proteinG: round(s.p, 1),
+              fatG: round(s.f, 1),
+              carbG: round(s.c, 1)
+            };
+          })
+        };
+      });
+      var strength = day.strength.map(function (w) {
+        return {
+          exercise: w.name,
+          sets: (w.sets || []).map(function (s) {
+            return { reps: num(s.reps), weightKg: num(s.weightKg), warmup: !!s.warmup };
+          }),
+          volumeKg: setVolume(w.sets || []),
+          estimated1rmKg: bestE1rm(w.sets || []),
+          kcalBurned: w.kcalBurned ? { value: num(w.kcalBurned), source: w.kcalSource || 'manual' } : null
+        };
+      });
+      var cardio = day.cardio.map(function (c) {
+        return {
+          exercise: c.name,
+          durationMin: num(c.durationMin),
+          distanceKm: c.distanceKm ? num(c.distanceKm) : null,
+          kcalBurned: { value: num(c.kcalBurned), source: c.kcalSource || 'manual' }
+        };
+      });
+
+      days.push({
+        date: key,
+        target: target ? {
+          kcal: target.kcal, proteinG: target.proteinG,
+          fatG: target.fatG, carbG: target.carbG
+        } : null,
+        totals: {
+          kcal: t.kcal, proteinG: t.p, fatG: t.f, carbG: t.c,
+          kcalBurned: t.burned, trainingVolumeKg: t.volume
+        },
+        meals: meals,
+        strength: strength,
+        cardio: cardio,
+        note: day.note || ''
+      });
+
+      sumKcal += t.kcal; sumP += t.p; counted++;
+      if (target && Math.abs(t.kcal - target.kcal) <= target.kcal * 0.1) hitKcal++;
+    }
+
+    var age = state.profile.birthYear ? new Date().getFullYear() - state.profile.birthYear : null;
+
+    return {
+      schemaVersion: SCHEMA_VERSION,
+      exportedAt: new Date().toISOString(),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      range: { from: fromKey, to: toKey, daysWithData: counted },
+      profile: {
+        sex: state.profile.sex,
+        age: age,
+        heightCm: num(state.profile.heightCm),
+        weightKg: num(state.profile.weightKg),
+        activityLevel: state.profile.activityLevel,
+        estimatedTdee: tdee(state.profile)
+      },
+      settings: { burnedCaloriesAddedToBudget: !!state.settings.addBurnedToBudget },
+      summary: {
+        avgKcal: counted ? Math.round(sumKcal / counted) : 0,
+        avgProteinG: counted ? round(sumP / counted, 1) : 0,
+        kcalWithin10PctOfTargetDays: hitKcal,
+        checkInStreak: streak(state)
+      },
+      days: days,
+      analysisPrompt: prompt || DEFAULT_PROMPT
+    };
+  }
+
+  global.Core = {
+    SCHEMA_VERSION: SCHEMA_VERSION,
+    STORAGE_KEY: STORAGE_KEY,
+    MEAL_TYPES: MEAL_TYPES,
+    ACTIVITY_LEVELS: ACTIVITY_LEVELS,
+    STRENGTH_DB: STRENGTH_DB,
+    CARDIO_DB: CARDIO_DB,
+    DEFAULT_PROMPT: DEFAULT_PROMPT,
+    DAY_PROMPT: DAY_PROMPT,
+    uid: uid, dateKey: dateKey, todayKey: todayKey, parseKey: parseKey,
+    addDays: addDays, num: num, round: round, pad2: pad2,
+    bmr: bmr, tdee: tdee, suggestTargets: suggestTargets, activityFactor: activityFactor,
+    profileComplete: profileComplete,
+    targetForDate: targetForDate, scaleFood: scaleFood,
+    e1rm: e1rm, setVolume: setVolume, bestE1rm: bestE1rm,
+    getDay: getDay, dayIsEmpty: dayIsEmpty, dayTotals: dayTotals,
+    exerciseList: exerciseList, isKnownExercise: isKnownExercise, ensureExercise: ensureExercise,
+    renameExercise: renameExercise,
+    remaining: remaining, draftTotals: draftTotals, streak: streak,
+    defaultState: defaultState, migrate: migrate, load: load, save: save,
+    exportPayload: exportPayload
+  };
+})(typeof window !== 'undefined' ? window : this);
+
+</script>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+const C = window.Core;
+
+/* ============ Lucide 图标（inline SVG，strokeWidth 1.75） ============ */
+const PATHS = {
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  plus: '<path d="M5 12h14M12 5v14"/>',
+  minus: '<path d="M5 12h14"/>',
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  utensils: '<path d="M3 2v7a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6a2 2 0 0 0 2 2h3Zm0 0v7"/>',
+  dumbbell: '<path d="m6.5 6.5 11 11M21 21l-1-1M3 3l1 1M18 22l4-4M2 6l4-4M3 10l7-7M14 21l7-7"/>',
+  activity: '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+  chart: '<path d="M3 3v16a2 2 0 0 0 2 2h16M18 17V9M13 17V5M8 17v-3"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>',
+  pencil: '<path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/>',
+  trash: '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>',
+  copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  left: '<path d="m15 18-6-6 6-6"/>',
+  right: '<path d="m9 18 6-6-6-6"/>',
+  flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5Z"/>',
+  sparkles: '<path d="m12 3 1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3Z"/><path d="M19 3v4M21 5h-4M4 17v2M5 18H3"/>',
+  reset: '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+  target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/>',
+  moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+  monitor: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+  eyeOff: '<path d="M10.7 5.1A9.9 9.9 0 0 1 12 5c6.5 0 10 7 10 7a13.2 13.2 0 0 1-2.2 3M6.6 6.6A13.2 13.2 0 0 0 2 12s3.5 7 10 7a9.6 9.6 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2M2 2l20 20"/>',
+  book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>',
+  note: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/>',
+};
+function Icon({ n, s = 20, sw = 1.75, style }) {
+  return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" style={style}
+    aria-hidden="true" dangerouslySetInnerHTML={{ __html: PATHS[n] || '' }} />;
+}
+
+/* ============ 小工具 ============ */
+const WEEKDAY = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+function fmtDate(key) {
+  const d = C.parseKey(key);
+  return `${WEEKDAY[d.getDay()]},${d.getMonth() + 1}月${d.getDate()}日`;
+}
+function shortDate(key) {
+  const d = C.parseKey(key);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+function signed(v) { return v > 0 ? `+${v}` : `${v}`; }
+
+/** 近几天用相对说法，更远的用日期 */
+function dayTitle(key) {
+  const today = C.todayKey();
+  if (key === today) return '今日';
+  if (key === C.addDays(today, -1)) return '昨天';
+  if (key === C.addDays(today, -2)) return '前天';
+  const d = C.parseKey(key);
+  return `${d.getMonth() + 1}月${d.getDate()}日`;
+}
+
+async function copyText(t) {
+  try {
+    await navigator.clipboard.writeText(t);
+    return true;
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+}
+function downloadFile(name, text) {
+  const blob = new Blob([text], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* ============ 通用组件 ============ */
+const sheetStack = [];
+function Sheet({ title, onClose, layer = 0, children }) {
+  const meRef = useRef({});
+  useEffect(() => {
+    const me = meRef.current;
+    sheetStack.push(me);
+    if (sheetStack.length === 1) document.body.style.overflow = 'hidden';
+    // 嵌套时 Esc 只关最上面那层，否则一次按键会把两层都关掉
+    const h = (e) => { if (e.key === 'Escape' && sheetStack[sheetStack.length - 1] === me) onClose(); };
+    document.addEventListener('keydown', h);
+    return () => {
+      document.removeEventListener('keydown', h);
+      const i = sheetStack.indexOf(me);
+      if (i >= 0) sheetStack.splice(i, 1);
+      if (sheetStack.length === 0) document.body.style.overflow = '';
+    };
+  }, [onClose]);
+  return (
+    <div className="scrim" style={{ zIndex: 40 + layer * 10 }}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="sheet" role="dialog" aria-modal="true" aria-label={title}>
+        <div className="sheet-hd">
+          <div className="grip" />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <h2 className="sheet-t" style={{ flex: 1 }}>{title}</h2>
+            <button className="closebtn" onClick={onClose} aria-label="关闭"><span><Icon n="x" s={14} sw={2.2} /></span></button>
+          </div>
+        </div>
+        <div className="sheet-body">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function Seg({ value, onChange, options }) {
+  return (
+    <div className="seg" role="group">
+      {options.map(o => (
+        <button key={o.id} aria-pressed={value === o.id} onClick={() => onChange(o.id)}>{o.label}</button>
+      ))}
+    </div>
+  );
+}
+
+function Field({ label, action, children }) {
+  return (
+    <div className="fg">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+        <label className="fl" style={{ marginBottom: 0 }}>{label}</label>
+        {action}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// 用 text + inputMode 而非 type=number：后者在桌面端滚轮划过会静默改值
+function NumInput({ value, onChange, placeholder, autoFocus }) {
+  return <input className="num" type="text" inputMode="decimal" autoFocus={autoFocus}
+    value={value == null ? '' : value} placeholder={placeholder}
+    onChange={e => onChange(e.target.value.replace(/[^\d.\-]/g, ''))} />;
+}
+
+function Empty({ children }) { return <div className="empty">{children}</div>; }
+
+
+/* ============ 食物库管理 ============ */
+function FoodLibrary({ presets, onChange, onClose, layer }) {
+  const [q, setQ] = useState('');
+  const [sort, setSort] = useState('used');
+  const [edit, setEdit] = useState(null);
+
+  const list = useMemo(() => {
+    let out = presets.slice();
+    const k = q.trim().toLowerCase();
+    if (k) out = out.filter(p => p.name.toLowerCase().includes(k));
+    if (sort === 'used') out.sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0));
+    else if (sort === 'recent') out.sort((a, b) => String(b.lastUsedAt || '').localeCompare(String(a.lastUsedAt || '')));
+    else out.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+    return out;
+  }, [presets, q, sort]);
+
+  function blank() {
+    return { id: null, name: '', basis: 'per100g', servingLabel: '份', kcal: '', p: '', f: '', c: '', usageCount: 0 };
+  }
+
+  function save() {
+    const item = {
+      id: edit.id || C.uid(), name: edit.name.trim(), basis: edit.basis,
+      servingLabel: edit.servingLabel || '份',
+      kcal: C.num(edit.kcal), p: C.num(edit.p), f: C.num(edit.f), c: C.num(edit.c),
+      usageCount: edit.usageCount || 0, lastUsedAt: edit.lastUsedAt || null
+    };
+    onChange(edit.id ? presets.map(p => p.id === edit.id ? item : p) : presets.concat([item]));
+    setEdit(null);
+  }
+
+  if (edit) {
+    const valid = edit.name.trim().length > 0;
+    return (
+      <Sheet title={edit.id ? '编辑食物' : '新增食物'} layer={layer} onClose={() => setEdit(null)}>
+        <Field label="名称"><input value={edit.name} onChange={e => setEdit({ ...edit, name: e.target.value })} placeholder="鸡胸肉" /></Field>
+        <Field label="营养基准">
+          <Seg value={edit.basis} onChange={v => setEdit({ ...edit, basis: v })}
+            options={[{ id: 'per100g', label: '每 100 g' }, { id: 'perServing', label: '每份' }]} />
+        </Field>
+        {edit.basis === 'perServing' && (
+          <Field label="一份的说法"><input value={edit.servingLabel}
+            onChange={e => setEdit({ ...edit, servingLabel: e.target.value })} placeholder="个 / 碗 / 盒" /></Field>
+        )}
+        <div className="grid2">
+          <Field label="热量 kcal"><NumInput value={edit.kcal} onChange={v => setEdit({ ...edit, kcal: v })} /></Field>
+          <Field label="蛋白质 g"><NumInput value={edit.p} onChange={v => setEdit({ ...edit, p: v })} /></Field>
+        </div>
+        <div className="grid2">
+          <Field label="脂肪 g"><NumInput value={edit.f} onChange={v => setEdit({ ...edit, f: v })} /></Field>
+          <Field label="碳水 g"><NumInput value={edit.c} onChange={v => setEdit({ ...edit, c: v })} /></Field>
+        </div>
+        <div className="rs" style={{ marginBottom: 14, lineHeight: 1.7 }}>
+          改这里只影响以后录入时带出的默认值。已经记过的内容存的是当时的数值，不会被追溯修改。
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          {edit.id && <button className="btn ghost danger" style={{ flex: 1 }} onClick={() => {
+            if (confirm('从库里删除「' + edit.name + '」？历史记录不受影响。')) {
+              onChange(presets.filter(p => p.id !== edit.id)); setEdit(null);
+            }
+          }}><Icon n="trash" s={16} />删除</button>}
+          <button className="btn" style={{ flex: 1, height: 44, fontSize: 14 }} disabled={!valid} onClick={save}>保存</button>
+        </div>
+      </Sheet>
+    );
+  }
+
+  return (
+    <Sheet title="常用食物" layer={layer} onClose={onClose}>
+      <div style={{ position: 'relative', marginBottom: 12 }}>
+        <input value={q} onChange={e => setQ(e.target.value)} placeholder="搜索" style={{ paddingLeft: 34 }} />
+        <span style={{ position: 'absolute', left: 11, top: 10, color: 'var(--text-2)' }}><Icon n="search" s={17} /></span>
+      </div>
+      <div style={{ marginBottom: 14 }}>
+        <Seg value={sort} onChange={setSort} options={[
+          { id: 'used', label: '最常用' }, { id: 'recent', label: '最近用' }, { id: 'name', label: '名称' }]} />
+      </div>
+
+      <button className="btn ghost" style={{ marginBottom: 14 }} onClick={() => setEdit(blank())}>
+        <Icon n="plus" s={16} />新增食物
+      </button>
+
+      <div className="card">
+        {list.length === 0 ? (
+          <Empty>{q ? '没有匹配的食物。' : '记录过的食物会自动出现在这里。'}</Empty>
+        ) : list.map((p, i) => (
+          <React.Fragment key={p.id}>
+            {i > 0 && <div className="rowdiv full" />}
+            <button onClick={() => setEdit({ ...p, kcal: String(p.kcal), p: String(p.p), f: String(p.f), c: String(p.c) })}
+              style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '11px 14px', width: '100%',
+                border: 0, background: 'none', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit' }}>
+              <div className="grow">
+                <div className="rt trunc">{p.name}</div>
+                <div className="rs" style={{ fontFamily: 'var(--mono)' }}>
+                  {p.basis === 'per100g' ? '每100g' : '每' + (p.servingLabel || '份')} · {p.kcal} kcal · P{p.p} F{p.f} C{p.c}
+                </div>
+              </div>
+              <span className="rv" style={{ color: 'var(--text-2)', fontSize: 12 }}>{p.usageCount || 0} 次</span>
+              <Icon n="pencil" s={15} style={{ color: 'var(--text-2)', flex: '0 0 auto' }} />
+            </button>
+          </React.Fragment>
+        ))}
+      </div>
+    </Sheet>
+  );
+}
+
+/* ============ 动作库管理 ============ */
+function ExerciseLibrary({ state, setState, onClose, layer, initialKind }) {
+  const [kind, setKind] = useState(initialKind || 'strength');
+  const [q, setQ] = useState('');
+  const [newName, setNewName] = useState('');
+  const [rename, setRename] = useState(null);
+
+  const hidden = state.hiddenExerciseIds || [];
+  const builtin = kind === 'cardio' ? C.CARDIO_DB : C.STRENGTH_DB;
+  const custom = (state.customExercises || []).filter(e => e.kind === kind);
+
+  const k = q.trim().toLowerCase();
+  const match = (n) => !k || n.toLowerCase().includes(k);
+
+  const groups = useMemo(() => {
+    const g = {};
+    builtin.filter(e => match(e.zh)).forEach(e => {
+      const key = e.group || '有氧';
+      (g[key] = g[key] || []).push(e);
+    });
+    return g;
+  }, [builtin, k]);
+
+  function toggleHide(id) {
+    setState(s => {
+      const h = s.hiddenExerciseIds || [];
+      return { ...s, hiddenExerciseIds: h.indexOf(id) >= 0 ? h.filter(x => x !== id) : h.concat([id]) };
+    });
+  }
+
+  function addCustom() {
+    const n = newName.trim();
+    if (!n) return;
+    setState(s => C.ensureExercise(s, n, kind));
+    setNewName('');
+  }
+
+  if (rename) {
+    return (
+      <Sheet title="重命名动作" layer={layer} onClose={() => setRename(null)}>
+        <Field label="名称"><input value={rename.value} autoFocus
+          onChange={e => setRename({ ...rename, value: e.target.value })} /></Field>
+        <div className="rs" style={{ marginBottom: 14, lineHeight: 1.7 }}>
+          历史记录里的这个动作会一起改名，否则统计里会裂成两个动作。
+        </div>
+        <button className="btn" disabled={!rename.value.trim()} onClick={() => {
+          setState(s => C.renameExercise(s, kind, rename.old, rename.value));
+          setRename(null);
+        }}>保存</button>
+      </Sheet>
+    );
+  }
+
+  return (
+    <Sheet title="动作库" layer={layer} onClose={onClose}>
+      <div style={{ marginBottom: 12 }}>
+        <Seg value={kind} onChange={setKind} options={[
+          { id: 'strength', label: '力量' }, { id: 'cardio', label: '有氧' }]} />
+      </div>
+      <div style={{ position: 'relative', marginBottom: 14 }}>
+        <input value={q} onChange={e => setQ(e.target.value)} placeholder="搜索" style={{ paddingLeft: 34 }} />
+        <span style={{ position: 'absolute', left: 11, top: 10, color: 'var(--text-2)' }}><Icon n="search" s={17} /></span>
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
+        <input value={newName} onChange={e => setNewName(e.target.value)} placeholder="新增自定义动作"
+          onKeyDown={e => { if (e.key === 'Enter') addCustom(); }} />
+        <button className="btn" style={{ width: 74, height: 40, fontSize: 14, flex: '0 0 auto' }}
+          disabled={!newName.trim()} onClick={addCustom}>添加</button>
+      </div>
+
+      {custom.length > 0 && (
+        <div className="sec" style={{ marginTop: 0 }}>
+          <div className="sec-hd"><span className="sec-t">自定义（{custom.length}）</span></div>
+          <div className="card">
+            {custom.filter(e => match(e.zh)).map((e, i) => (
+              <React.Fragment key={e.id}>
+                {i > 0 && <div className="rowdiv full" />}
+                <div className="row row-tight">
+                  <div className="grow"><div className="rt trunc">{e.zh}</div></div>
+                  <button className="iconbtn pale" style={{ width: 32, height: 32 }} aria-label={'重命名 ' + e.zh}
+                    onClick={() => setRename({ old: e.zh, value: e.zh })}>
+                    <span style={{ width: 26, height: 26, background: 'transparent' }}><Icon n="pencil" s={15} /></span></button>
+                  <button className="iconbtn pale" style={{ width: 32, height: 32, marginRight: -6 }} aria-label={'删除 ' + e.zh}
+                    onClick={() => {
+                      if (confirm('从库里删除「' + e.zh + '」？历史记录不受影响。'))
+                        setState(s => ({ ...s, customExercises: s.customExercises.filter(x => x.id !== e.id) }));
+                    }}>
+                    <span style={{ width: 26, height: 26, background: 'transparent' }}><Icon n="trash" s={15} /></span></button>
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="sec">
+        <div className="sec-hd">
+          <span className="sec-t">内置动作</span>
+          {hidden.length > 0 && <button className="linkbtn"
+            onClick={() => setState(s => ({ ...s, hiddenExerciseIds: [] }))}>全部恢复（{hidden.length}）</button>}
+        </div>
+        <div className="rs" style={{ padding: '0 11px 8px', lineHeight: 1.7 }}>
+          用眼睛图标把不练的动作藏起来，录入时搜索列表会干净很多。隐藏不影响历史记录。
+        </div>
+        {Object.keys(groups).map(gname => (
+          <div key={gname} style={{ marginBottom: 10 }}>
+            <div className="sec-t" style={{ padding: '6px 11px' }}>{gname}</div>
+            <div className="card">
+              {groups[gname].map((e, i) => {
+                const off = hidden.indexOf(e.id) >= 0;
+                return (
+                  <React.Fragment key={e.id}>
+                    {i > 0 && <div className="rowdiv full" />}
+                    <div className="row row-tight" style={{ opacity: off ? .45 : 1 }}>
+                      <div className="grow"><div className="rt trunc">{e.zh}</div></div>
+                      <button className="iconbtn pale" style={{ width: 32, height: 32, marginRight: -6 }}
+                        aria-label={(off ? '显示 ' : '隐藏 ') + e.zh} onClick={() => toggleHide(e.id)}>
+                        <span style={{ width: 26, height: 26, background: 'transparent' }}>
+                          <Icon n={off ? 'eyeOff' : 'eye'} s={16} /></span></button>
+                    </div>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </Sheet>
+  );
+}
+
+/* ============ Hero：剩余额度 ============ */
+/**
+ * 刻度取 max(目标, 已摄入)，超标时目标位置打一条竖标记。
+ * 这样“超 8 g”和“超 200 g”视觉上不再一样长。
+ */
+function MacroBar({ label, rem, target }) {
+  const t = C.num(target);
+  const used = t - rem;
+  const over = rem < 0;
+  const scale = Math.max(t, used, 1);
+  const fill = Math.max(0, Math.min(100, (used / scale) * 100));
+  const mark = t > 0 ? (t / scale) * 100 : 100;
+  return (
+    <div>
+      <div className="bar-hd">
+        <span>{label}</span>
+        <span className="n">{t <= 0 ? '未设目标' : over ? `超 ${Math.abs(rem)} g` : `还需 ${rem} g`}</span>
+      </div>
+      <div className="bar">
+        <i className={over ? 'over' : ''} style={{ width: fill + '%' }} />
+        {over && <u style={{ left: `calc(${mark}% - 1px)` }} />}
+      </div>
+    </div>
+  );
+}
+
+function Hero({ totals, target, rem, draft, hasDraft, onSetup }) {
+  const consumed = totals.kcal + (hasDraft ? draft.kcal : 0);
+  const noTarget = !target || !C.num(target.kcal);
+  if (noTarget) {
+    return (
+      <div className="hero">
+        <div className="hero-l">还没设定每日目标</div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 7, padding: '5px 0 4px' }}>
+          <span className="hero-n">—</span>
+          <span className="hero-u">kcal</span>
+          <span className="hero-m">今日已摄入 {consumed}</span>
+        </div>
+        <div className="hero-div" />
+        <button className="btn sm" style={{ background: 'var(--on-hero)', color: 'var(--hero-a)' }} onClick={onSetup}>
+          <Icon n="target" s={15} />设定目标
+        </button>
+      </div>
+    );
+  }
+  return (
+    <div className="hero">
+      <div className="hero-l">{'剩余热量'}</div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 7, padding: '5px 0 4px' }}>
+        <span className="hero-n">{rem.kcal}</span>
+        <span className="hero-u">kcal</span>
+        <span className="hero-m">{consumed} / {rem.budget}</span>
+      </div>
+      <div className="hero-div" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+        <MacroBar label="蛋白质" rem={rem.p} target={C.num(target && target.proteinG)} />
+        <MacroBar label="脂肪" rem={rem.f} target={C.num(target && target.fatG)} />
+        <MacroBar label="碳水" rem={rem.c} target={C.num(target && target.carbG)} />
+      </div>
+    </div>
+  );
+}
+
+/* ============ 试算区 ============ */
+function DraftBox({ items, remBase, remDraft, onAdd, onRemove, onClear, onCommit }) {
+  return (
+    <div className="sec">
+      <div className="sec-hd"><span className="sec-t">试算 · 不保存</span>
+        {items.length > 0 && <button className="linkbtn" onClick={onClear}>清空</button>}
+      </div>
+      {items.length === 0 ? (
+        <button className="hintbtn" onClick={onAdd}>
+          <Icon n="plus" s={16} />
+          <span className="grow">加点东西，看看会不会超</span>
+        </button>
+      ) : (
+      <div className="card" style={{ padding: '12px 13px' }}>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+          {items.map((it, i) => (
+            <button key={i} className="chip" onClick={() => onRemove(i)}>
+              {it.name} {C.num(it.amount)}{it.basis === 'per100g' ? 'g' : '×'}
+              <Icon n="x" s={12} sw={2.2} />
+            </button>
+          ))}
+          <button className="chip out" onClick={onAdd}><Icon n="plus" s={12} sw={2.2} />添加</button>
+        </div>
+        {(
+          <>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 7, fontFamily: 'var(--mono)', fontSize: 13, marginBottom: 12 }}>
+              <span style={{ color: 'var(--text-2)' }}>剩余</span>
+              <span>{remBase.kcal}</span>
+              <Icon n="right" s={13} style={{ color: 'var(--text-2)' }} />
+              <span style={{ color: remDraft.kcal < 0 ? 'var(--warn)' : 'var(--brand)', fontSize: 17 }}>{remDraft.kcal}</span>
+              <span style={{ fontSize: 11, color: 'var(--text-2)' }}>kcal</span>
+            </div>
+            <button className="btn sm" onClick={onCommit}><Icon n="check" s={15} />记入当天</button>
+          </>
+        )}
+      </div>
+      )}
+    </div>
+  );
+}
+
+/* ============ 今日记录列表 ============ */
+/**
+ * 每条记录都可点开编辑。刻意不放行内删除按钮：
+ * 手机上误触即丢数据，删除统一收进编辑弹层，配合撤销 toast。
+ */
+function DayRecords({ day, onEdit, dense, emptyText }) {
+  const blocks = [];
+
+  day.meals.forEach(m => {
+    const mt = C.MEAL_TYPES.find(x => x.id === m.type);
+    const t = C.dayTotals({ meals: [m], strength: [], cardio: [] });
+    blocks.push({
+      key: 'm' + m.id, icon: 'utensils', pale: false,
+      title: mt ? mt.label : '进食',
+      sub: `${(m.items || []).length} 项 · 蛋白 ${t.p} g`,
+      value: String(t.kcal),
+      subrows: (m.items || []).map(it => {
+        const sc = C.scaleFood(it);
+        return {
+          key: it.id,
+          label: `${it.name} ${C.num(it.amount)}${it.basis === 'per100g' ? 'g' : ' ' + (it.servingLabel || '份')}`,
+          value: `${Math.round(sc.kcal)}`,
+          onClick: () => onEdit({ kind: 'food', mealId: m.id, item: it, mealType: m.type })
+        };
+      })
+    });
+  });
+
+  day.strength.forEach(w => {
+    const sets = w.sets || [];
+    const work = sets.filter(x => !x.warmup);
+    blocks.push({
+      key: 's' + w.id, icon: 'dumbbell', pale: true, title: w.name,
+      sub: `${work.length} 组 · 容量 ${C.setVolume(sets)} kg · e1RM ${C.bestE1rm(sets)}`,
+      value: work.length ? `${C.num(work[work.length - 1].weightKg)}kg` : '—',
+      onClick: () => onEdit({ kind: 'strength', item: w }),
+      subrows: dense ? [] : work.map((x, n) => ({
+        key: n, label: `第 ${n + 1} 组`, value: `${C.num(x.weightKg)} × ${C.num(x.reps)}`
+      }))
+    });
+  });
+
+  day.cardio.forEach(c => {
+    blocks.push({
+      key: 'c' + c.id, icon: 'activity', pale: true, title: c.name,
+      sub: `${C.num(c.durationMin)} 分钟${c.distanceKm ? ` · ${C.num(c.distanceKm)} km` : ''}${c.kcalSource === 'device' ? ' · 设备' : ''}`,
+      value: `${C.num(c.kcalBurned)}`,
+      onClick: () => onEdit({ kind: 'cardio', item: c }),
+      subrows: []
+    });
+  });
+
+  if (!blocks.length) {
+    return <div className="card"><Empty>{emptyText || <>今天还没有记录。<br />点下面的按钮开始。</>}</Empty></div>;
+  }
+
+  return (
+    <div className="card">
+      {blocks.map((b, i) => {
+        const Head = b.onClick ? 'button' : 'div';
+        return (
+          <React.Fragment key={b.key}>
+            {i > 0 && <div className="rowdiv" />}
+            <Head className={b.onClick ? 'rowbtn row' : 'row'} onClick={b.onClick}>
+              <div className={'tile' + (b.pale ? ' pale' : '')}><Icon n={b.icon} s={16} /></div>
+              <div className="grow">
+                <div className="rt trunc">{b.title}</div>
+                <div className="rs">{b.sub}</div>
+              </div>
+              <span className="rv">{b.value}</span>
+              {b.onClick && <Icon n="right" s={15} style={{ color: 'var(--text-2)', flex: '0 0 auto', marginLeft: 4 }} />}
+            </Head>
+            {b.subrows.map(sr => (
+              sr.onClick
+                ? <button key={sr.key} className="subrow" onClick={sr.onClick}>
+                    <span className="grow trunc" style={{ color: 'var(--text-2)' }}>{sr.label}</span>
+                    <span style={{ fontFamily: 'var(--mono)', color: 'var(--text-2)', fontSize: 12 }}>{sr.value}</span>
+                    <Icon n="pencil" s={13} style={{ color: 'var(--text-2)', flex: '0 0 auto' }} />
+                  </button>
+                : <div key={sr.key} className="subrow" style={{ cursor: 'default' }}>
+                    <span className="grow trunc" style={{ color: 'var(--text-2)' }}>{sr.label}</span>
+                    <span style={{ fontFamily: 'var(--mono)', color: 'var(--text-2)', fontSize: 12 }}>{sr.value}</span>
+                  </div>
+            ))}
+          </React.Fragment>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ============ 食物表单（记录 + 试算共用） ============ */
+function FoodForm({ presets, onSubmit, onSubmitDraft, onManage, initial, onDelete }) {
+  const editing = !!initial;
+  const [mealType, setMealType] = useState(() => {
+    if (initial) return initial.mealType;
+    const h = new Date().getHours();
+    return h < 10 ? 'breakfast' : h < 15 ? 'lunch' : h < 21 ? 'dinner' : 'snack';
+  });
+  const [q, setQ] = useState('');
+  const [f, setF] = useState(() => initial ? {
+    name: initial.name, basis: initial.basis, servingLabel: initial.servingLabel || '份',
+    kcal: String(initial.kcal), p: String(initial.p), f: String(initial.f), c: String(initial.c),
+    amount: String(initial.amount)
+  } : { name: '', basis: 'per100g', servingLabel: '份', kcal: '', p: '', f: '', c: '', amount: '' });
+  // 选了收藏项之后营养值已经填好，折起来让「份量」直接可及
+  const [showNutrition, setShowNutrition] = useState(!initial);
+
+  const matches = useMemo(() => {
+    const list = presets.slice().sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0));
+    if (!q.trim()) return list.slice(0, 8);
+    const k = q.trim().toLowerCase();
+    return list.filter(p => p.name.toLowerCase().includes(k)).slice(0, 8);
+  }, [presets, q]);
+
+  function pick(p) {
+    setF({
+      name: p.name, basis: p.basis, servingLabel: p.servingLabel || '份',
+      kcal: String(p.kcal), p: String(p.p), f: String(p.f), c: String(p.c),
+      amount: p.basis === 'per100g' ? '100' : '1'
+    });
+    setShowNutrition(false);
+    setQ('');
+  }
+
+  const item = {
+    name: f.name.trim(), basis: f.basis, servingLabel: f.servingLabel,
+    kcal: C.num(f.kcal), p: C.num(f.p), f: C.num(f.f), c: C.num(f.c), amount: C.num(f.amount)
+  };
+  const preview = C.scaleFood(item);
+  const valid = item.name && item.amount > 0;
+
+  return (
+    <div>
+      <Field label="餐次">
+        <Seg value={mealType} onChange={setMealType} options={C.MEAL_TYPES.map(m => ({ id: m.id, label: m.label }))} />
+      </Field>
+
+      {!editing && <Field label="常用食物" action={<button className="linkbtn" onClick={onManage}>管理</button>}>
+        <div style={{ position: 'relative' }}>
+          <input value={q} onChange={e => setQ(e.target.value)} placeholder="搜索已保存的食物" style={{ paddingLeft: 34 }} />
+          <span style={{ position: 'absolute', left: 11, top: 10, color: 'var(--text-2)' }}><Icon n="search" s={17} /></span>
+        </div>
+        {matches.length > 0 && (
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 9 }}>
+            {matches.map(p => <button key={p.id} className="chip plain" onClick={() => pick(p)}>{p.name}</button>)}
+          </div>
+        )}
+        {presets.length === 0 && <div className="rs" style={{ marginTop: 8 }}>首次手动录入的食物会自动存进这里，下次一点就能复用。</div>}
+      </Field>}
+
+      {!editing && <div className="rowdiv full" style={{ margin: '4px 0 16px' }} />}
+
+      <Field label="名称">
+        <input value={f.name} onChange={e => setF({ ...f, name: e.target.value })} placeholder="鸡胸肉" />
+      </Field>
+
+      {showNutrition ? (
+        <>
+          <Field label="营养基准">
+            <Seg value={f.basis} onChange={v => setF({ ...f, basis: v, amount: v === 'per100g' ? '100' : '1' })}
+              options={[{ id: 'per100g', label: '每 100 g' }, { id: 'perServing', label: '每份' }]} />
+          </Field>
+          <div className="grid2">
+            <Field label="热量 kcal"><NumInput value={f.kcal} onChange={v => setF({ ...f, kcal: v })} placeholder="165" /></Field>
+            <Field label="蛋白质 g"><NumInput value={f.p} onChange={v => setF({ ...f, p: v })} placeholder="31" /></Field>
+          </div>
+          <div className="grid2">
+            <Field label="脂肪 g"><NumInput value={f.f} onChange={v => setF({ ...f, f: v })} placeholder="3.6" /></Field>
+            <Field label="碳水 g"><NumInput value={f.c} onChange={v => setF({ ...f, c: v })} placeholder="0" /></Field>
+          </div>
+        </>
+      ) : (
+        <div className="fg">
+          <button className="hintbtn" onClick={() => setShowNutrition(true)}>
+            <span className="grow" style={{ fontFamily: 'var(--mono)' }}>
+              {f.basis === 'per100g' ? '每100g' : '每' + f.servingLabel} · {f.kcal || 0} kcal · P{f.p || 0} F{f.f || 0} C{f.c || 0}
+            </span>
+            <Icon n="pencil" s={15} />
+          </button>
+        </div>
+      )}
+
+      <Field label={f.basis === 'per100g' ? '实际重量 g' : '份数'}>
+        <NumInput autoFocus={!showNutrition} value={f.amount} onChange={v => setF({ ...f, amount: v })}
+          placeholder={f.basis === 'per100g' ? '150' : '1'} />
+      </Field>
+
+      {valid && (
+        <div className="card" style={{ padding: '11px 13px', marginBottom: 14, fontFamily: 'var(--mono)', fontSize: 13 }}>
+          {Math.round(preview.kcal)} kcal · P {C.round(preview.p, 1)} · F {C.round(preview.f, 1)} · C {C.round(preview.c, 1)}
+        </div>
+      )}
+
+      <div style={{ display: 'flex', gap: 10 }}>
+        {editing ? (
+          <button className="btn ghost danger" style={{ flex: 1 }} onClick={onDelete}>
+            <Icon n="trash" s={16} />删除</button>
+        ) : (
+          <button className="btn ghost" style={{ flex: 1 }} disabled={!valid}
+            onClick={() => onSubmitDraft(mealType, item)}>加入试算</button>
+        )}
+        <button className="btn" style={{ flex: 1, height: 44, fontSize: 14 }} disabled={!valid}
+          onClick={() => onSubmit(mealType, item)}>{editing ? '保存' : '记录'}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ============ 力量表单 ============ */
+function StrengthForm({ state, onSubmit, onManage, initial, onDelete }) {
+  const editing = !!initial;
+  const all = useMemo(() => C.exerciseList(state, 'strength'), [state.customExercises, state.hiddenExerciseIds]);
+  const [q, setQ] = useState('');
+  const [name, setName] = useState(initial ? initial.name : '');
+  const [sets, setSets] = useState(() => initial
+    ? (initial.sets || []).map(x => ({ reps: String(C.num(x.reps)), weightKg: String(C.num(x.weightKg)), warmup: !!x.warmup }))
+    : [{ reps: '', weightKg: '', warmup: false }]);
+  const [kcal, setKcal] = useState(initial && initial.kcalBurned ? String(initial.kcalBurned) : '');
+
+  const matches = useMemo(() => {
+    const k = q.trim().toLowerCase();
+    if (!k) return all.slice(0, 10);
+    return all.filter(e => e.zh.toLowerCase().includes(k) || e.id.includes(k)).slice(0, 10);
+  }, [all, q]);
+
+  function chooseExercise(n) {
+    setName(n);
+    setQ('');
+    // 回填上一次同动作的组数与重量
+    const keys = Object.keys(state.days).sort().reverse();
+    for (const key of keys) {
+      const d = C.getDay(state, key);
+      const hit = d.strength.find(w => w.name === n);
+      if (hit && hit.sets && hit.sets.length) {
+        setSets(hit.sets.map(s => ({ reps: String(C.num(s.reps)), weightKg: String(C.num(s.weightKg)), warmup: !!s.warmup })));
+        return;
+      }
+    }
+    setSets([{ reps: '', weightKg: '', warmup: false }]);
+  }
+
+  const work = sets.filter(s => !s.warmup && C.num(s.reps) > 0);
+  const valid = name && work.length > 0;
+
+  return (
+    <div>
+      <Field label="动作" action={editing ? null : <button className="linkbtn" onClick={onManage}>动作库</button>}>
+        <div style={{ position: 'relative' }}>
+          <input value={name || q} readOnly={editing}
+            onChange={e => { setName(''); setQ(e.target.value); }} placeholder="搜索或输入动作名" style={{ paddingLeft: 34 }} />
+          <span style={{ position: 'absolute', left: 11, top: 10, color: 'var(--text-2)' }}><Icon n="search" s={17} /></span>
+        </div>
+        {!name && !editing && (
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 9 }}>
+            {matches.map(e => <button key={e.id} className="chip plain" onClick={() => chooseExercise(e.zh)}>{e.zh}</button>)}
+            {q.trim() && !matches.some(e => e.zh === q.trim()) &&
+              <button className="chip out" onClick={() => chooseExercise(q.trim())}><Icon n="plus" s={12} sw={2.2} />{q.trim()}</button>}
+          </div>
+        )}
+      </Field>
+
+      {name && (
+        <>
+          <label className="fl">{editing ? '组数' : '组数（自动带出上次的数值）'}</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
+            {sets.map((s, i) => (
+              <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <span style={{ width: 22, fontSize: 12, color: 'var(--text-2)', fontFamily: 'var(--mono)' }}>{i + 1}</span>
+                <input className="num" type="text" inputMode="decimal" value={s.weightKg} placeholder="kg"
+                  onChange={e => { const n = sets.slice(); n[i] = { ...s, weightKg: e.target.value.replace(/[^\d.]/g, '') }; setSets(n); }} />
+                <span style={{ color: 'var(--text-2)', fontSize: 13 }}>×</span>
+                <input className="num" type="text" inputMode="numeric" value={s.reps} placeholder="次"
+                  onChange={e => { const n = sets.slice(); n[i] = { ...s, reps: e.target.value.replace(/[^\d]/g, '') }; setSets(n); }} />
+                <button className="chip plain" style={{ padding: '7px 8px', opacity: s.warmup ? 1 : .5 }}
+                  title="热身组不计入容量"
+                  onClick={() => { const n = sets.slice(); n[i] = { ...s, warmup: !s.warmup }; setSets(n); }}>热</button>
+                <button className="iconbtn pale" style={{ width: 30, height: 30 }} aria-label="删除该组"
+                  onClick={() => setSets(sets.filter((_, j) => j !== i))}>
+                  <span style={{ width: 26, height: 26, background: 'transparent' }}><Icon n="minus" s={15} /></span>
+                </button>
+              </div>
+            ))}
+          </div>
+          <button className="btn ghost" style={{ marginBottom: 14 }}
+            onClick={() => setSets(sets.concat([{ ...(sets[sets.length - 1] || { reps: '', weightKg: '' }), warmup: false }]))}>
+            <Icon n="plus" s={16} />添加一组
+          </button>
+
+          <Field label="消耗 kcal（可留空）"><NumInput value={kcal} onChange={setKcal} placeholder="留空则不计入消耗" /></Field>
+
+          {valid && (
+            <div className="card" style={{ padding: '11px 13px', marginBottom: 14, fontFamily: 'var(--mono)', fontSize: 13 }}>
+              容量 {C.setVolume(sets)} kg · e1RM {C.bestE1rm(sets)} kg
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: 10 }}>
+            {editing && <button className="btn ghost danger" style={{ flex: 1 }} onClick={onDelete}>
+              <Icon n="trash" s={16} />删除</button>}
+            <button className="btn" style={{ flex: 1, height: editing ? 44 : 49, fontSize: editing ? 14 : 16 }}
+              disabled={!valid} onClick={() => onSubmit({
+                id: initial ? initial.id : C.uid(), name,
+                sets: sets.map(s => ({ reps: C.num(s.reps), weightKg: C.num(s.weightKg), warmup: !!s.warmup })),
+                kcalBurned: C.num(kcal), kcalSource: 'manual'
+              })}>{editing ? '保存' : '记录'}</button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ============ 有氧表单 ============ */
+function CardioForm({ state, onSubmit, onManage, initial, onDelete }) {
+  const editing = !!initial;
+  const all = useMemo(() => C.exerciseList(state, 'cardio'), [state.customExercises, state.hiddenExerciseIds]);
+  const [name, setName] = useState(initial ? initial.name : '');
+  const [q, setQ] = useState('');
+  const [dur, setDur] = useState(initial ? String(C.num(initial.durationMin)) : '');
+  const [dist, setDist] = useState(initial && initial.distanceKm ? String(initial.distanceKm) : '');
+  const [kcal, setKcal] = useState(initial ? String(C.num(initial.kcalBurned)) : '');
+  const [src, setSrc] = useState(initial ? (initial.kcalSource || 'manual') : 'device');
+
+  const matches = useMemo(() => {
+    const k = q.trim().toLowerCase();
+    if (!k) return all;
+    return all.filter(e => e.zh.toLowerCase().includes(k)).slice(0, 10);
+  }, [all, q]);
+
+  const valid = name && C.num(dur) > 0;
+  return (
+    <div>
+      <Field label="项目" action={editing ? null : <button className="linkbtn" onClick={onManage}>动作库</button>}>
+        <div style={{ position: 'relative' }}>
+          <input value={name || q} readOnly={editing}
+            onChange={e => { setName(''); setQ(e.target.value); }} placeholder="搜索或输入项目名" style={{ paddingLeft: 34 }} />
+          <span style={{ position: 'absolute', left: 11, top: 10, color: 'var(--text-2)' }}><Icon n="search" s={17} /></span>
+        </div>
+        {!name && !editing && (
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 9 }}>
+            {matches.map(e => <button key={e.id} className="chip plain" onClick={() => { setName(e.zh); setQ(''); }}>{e.zh}</button>)}
+            {q.trim() && <button className="chip out" onClick={() => { setName(q.trim()); setQ(''); }}><Icon n="plus" s={12} sw={2.2} />{q.trim()}</button>}
+          </div>
+        )}
+      </Field>
+
+      {name && (
+        <>
+          <div className="grid2">
+            <Field label="时长 分钟"><NumInput value={dur} onChange={setDur} placeholder="30" /></Field>
+            <Field label="距离 km（可选）"><NumInput value={dist} onChange={setDist} placeholder="5" /></Field>
+          </div>
+          <Field label="消耗 kcal"><NumInput value={kcal} onChange={setKcal} placeholder="从手表抄写" /></Field>
+          <Field label="数据来源">
+            <Seg value={src} onChange={setSrc} options={[
+              { id: 'device', label: '手表 / 设备' }, { id: 'manual', label: '自己估算' }]} />
+            <div className="rs" style={{ marginTop: 7, lineHeight: 1.6 }}>
+              来源会一起写进导出的 JSON。设备热量误差可达 ±25%，标注后 AI 分析时不会当成精确值。
+            </div>
+          </Field>
+          <div style={{ display: 'flex', gap: 10 }}>
+            {editing && <button className="btn ghost danger" style={{ flex: 1 }} onClick={onDelete}>
+              <Icon n="trash" s={16} />删除</button>}
+            <button className="btn" style={{ flex: 1, height: editing ? 44 : 49, fontSize: editing ? 14 : 16 }}
+              disabled={!valid} onClick={() => onSubmit({
+                id: initial ? initial.id : C.uid(), name, durationMin: C.num(dur), distanceKm: C.num(dist),
+                kcalBurned: C.num(kcal), kcalSource: src
+              })}>{editing ? '保存' : '记录'}</button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ============ 今日 ============ */
+function TodayTab({ state, setState, toast, viewDate, setViewDate, onSetup }) {
+  const key = viewDate;
+  const today = C.todayKey();
+  const isToday = key === today;
+  const [sheet, setSheet] = useState(null);
+  const [lib, setLib] = useState(null);
+  const [mode, setMode] = useState('food');
+  const [edit, setEdit] = useState(null);
+  const [draft, setDraft] = useState([]);
+
+  // 切换日期时清空试算，否则会把 A 日的假设带到 B 日
+  useEffect(() => { setDraft([]); }, [key]);
+
+  const day = C.getDay(state, key);
+  const target = C.targetForDate(state.targets, key);
+  const totals = C.dayTotals(day);
+  const dt = C.draftTotals(draft);
+  const remBase = C.remaining(totals, target, state.settings.addBurnedToBudget, null);
+  const remDraft = C.remaining(totals, target, state.settings.addBurnedToBudget, dt);
+
+  function updateDay(fn) {
+    setState(s => {
+      const d = C.getDay(s, key);
+      return { ...s, days: { ...s.days, [key]: fn(d) } };
+    });
+  }
+
+  function upsertPreset(s, item) {
+    const idx = s.foodPresets.findIndex(p => p.name === item.name && p.basis === item.basis);
+    const now = new Date().toISOString();
+    const list = s.foodPresets.slice();
+    if (idx >= 0) {
+      list[idx] = { ...list[idx], kcal: item.kcal, p: item.p, f: item.f, c: item.c,
+        usageCount: (list[idx].usageCount || 0) + 1, lastUsedAt: now };
+    } else {
+      list.push({ id: C.uid(), name: item.name, basis: item.basis, servingLabel: item.servingLabel,
+        kcal: item.kcal, p: item.p, f: item.f, c: item.c, usageCount: 1, lastUsedAt: now });
+    }
+    return { ...s, foodPresets: list };
+  }
+
+  function addFood(mealType, item) {
+    setState(s => {
+      const s2 = upsertPreset(s, item);
+      const d = C.getDay(s2, key);
+      const meals = d.meals.slice();
+      const i = meals.findIndex(m => m.type === mealType);
+      const entry = { ...item, id: C.uid() };
+      if (i >= 0) meals[i] = { ...meals[i], items: (meals[i].items || []).concat([entry]) };
+      else meals.push({ id: C.uid(), type: mealType, items: [entry] });
+      return { ...s2, days: { ...s2.days, [key]: { ...d, meals } } };
+    });
+    setSheet(null);
+    toast('已记录');
+  }
+
+  function commitDraft() {
+    setState(s => {
+      let s2 = s;
+      draft.forEach(it => { s2 = upsertPreset(s2, it); });
+      const d = C.getDay(s2, key);
+      const meals = d.meals.slice();
+      draft.forEach(it => {
+        const mt = it.mealType || 'snack';
+        const i = meals.findIndex(m => m.type === mt);
+        const entry = { ...it, id: C.uid() };
+        delete entry.mealType;
+        if (i >= 0) meals[i] = { ...meals[i], items: (meals[i].items || []).concat([entry]) };
+        else meals.push({ id: C.uid(), type: mt, items: [entry] });
+      });
+      return { ...s2, days: { ...s2.days, [key]: { ...d, meals } } };
+    });
+    setDraft([]);
+    toast('试算内容已记入今日');
+  }
+
+  /** 删除一律配撤销：确认弹窗打断操作，撤销既不打断又真能救回来 */
+  function removeWithUndo(mutate, label) {
+    const snapshot = state;
+    setState(s => {
+      const d = C.getDay(s, key);
+      return { ...s, days: { ...s.days, [key]: mutate(d) } };
+    });
+    setEdit(null);
+    toast(`已删除${label ? ' ' + label : ''}`, () => setState(snapshot));
+  }
+
+  function saveEdit(next) {
+    setState(s => {
+      const d = C.getDay(s, key);
+      if (edit.kind === 'strength') {
+        const s2 = C.ensureExercise(s, next.name, 'strength');
+        const d2 = C.getDay(s2, key);
+        return { ...s2, days: { ...s2.days, [key]: { ...d2, strength: d2.strength.map(w => w.id === next.id ? next : w) } } };
+      }
+      if (edit.kind === 'cardio') {
+        return { ...s, days: { ...s.days, [key]: { ...d, cardio: d.cardio.map(c => c.id === next.id ? next : c) } } };
+      }
+      return s;
+    });
+    setEdit(null);
+    toast('已保存');
+  }
+
+  /** 食物条目可能被移到另一餐，所以先从原餐摘掉再按目标餐次放回 */
+  function saveFoodEdit(mealType, item) {
+    const entry = { ...item, id: edit.item.id };
+    setState(s => {
+      const s2 = upsertPreset(s, item);
+      const d = C.getDay(s2, key);
+      let meals = d.meals
+        .map(m => m.id === edit.mealId ? { ...m, items: (m.items || []).filter(x => x.id !== edit.item.id) } : m);
+      const i = meals.findIndex(m => m.type === mealType);
+      if (i >= 0) meals[i] = { ...meals[i], items: (meals[i].items || []).concat([entry]) };
+      else meals.push({ id: C.uid(), type: mealType, items: [entry] });
+      meals = meals.filter(m => (m.items || []).length > 0);
+      return { ...s2, days: { ...s2.days, [key]: { ...d, meals } } };
+    });
+    setEdit(null);
+    toast('已保存');
+  }
+
+  const titles = { food: '记录饮食', strength: '记录力量训练', cardio: '记录有氧' };
+
+  return (
+    <>
+      <div className="hd">
+        <div style={{ minWidth: 0 }}>
+          <div className="hd-eyebrow">
+            {fmtDate(key)}
+            {!isToday && <>{' · '}<button className="linkbtn" onClick={() => setViewDate(today)}>回到今天</button></>}
+          </div>
+          <h1 className="hd-title">{dayTitle(key)}</h1>
+        </div>
+        <div style={{ display: 'flex', gap: 2, flex: '0 0 auto' }}>
+          <button className="iconbtn" aria-label="前一天"
+            onClick={() => setViewDate(C.addDays(key, -1))}><span><Icon n="left" s={17} /></span></button>
+          <button className="iconbtn" aria-label="后一天" disabled={isToday}
+            onClick={() => setViewDate(C.addDays(key, 1))}><span><Icon n="right" s={17} /></span></button>
+        </div>
+      </div>
+
+      <div className="scroll">
+        <Hero totals={totals} target={target} rem={draft.length ? remDraft : remBase}
+          draft={dt} hasDraft={draft.length > 0} onSetup={onSetup} />
+
+        <DraftBox items={draft} remBase={remBase} remDraft={remDraft}
+          onAdd={() => { setMode('food'); setSheet('rec'); }}
+          onRemove={i => setDraft(draft.filter((_, j) => j !== i))}
+          onClear={() => setDraft([])} onCommit={commitDraft} />
+
+        {totals.burned > 0 && (
+          <div className="sec">
+            <div className="sec-hd"><span className="sec-t">训练消耗</span></div>
+            <div className="card">
+              <div className="row row-tight">
+                <div className="tile pale"><Icon n="flame" s={16} /></div>
+                <div className="grow">
+                  <div className="rt">{totals.burned} kcal</div>
+                  <div className="rs">{state.settings.addBurnedToBudget ? '已回补进今日额度' : '未回补进额度（设置里可开启）'}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="sec">
+          <div className="sec-hd"><span className="sec-t">{isToday ? '今日记录' : '当天记录'}</span></div>
+          <DayRecords day={day} onEdit={setEdit}
+            emptyText={isToday ? null : `${dayTitle(key)}还没有记录，点下面的按钮补录。`} />
+        </div>
+
+        <div className="sec">
+          <div className="sec-hd"><span className="sec-t">备注</span></div>
+          <textarea rows={2} value={day.note} placeholder="睡眠、状态、外食场合…"
+            onChange={e => updateDay(d => ({ ...d, note: e.target.value }))} />
+        </div>
+
+      </div>
+
+      <div className="actionbar">
+        <button className="btn" onClick={() => { setMode('food'); setSheet('rec'); }}>
+          <Icon n="plus" s={18} />{isToday ? '记录' : `补录到 ${dayTitle(key)}`}
+        </button>
+      </div>
+
+      {sheet === 'rec' && (
+        <Sheet title={titles[mode]} onClose={() => setSheet(null)}>
+          <div style={{ marginBottom: 16 }}>
+            <Seg value={mode} onChange={setMode} options={[
+              { id: 'food', label: '饮食' }, { id: 'strength', label: '力量' }, { id: 'cardio', label: '有氧' }]} />
+          </div>
+          {mode === 'food' && <FoodForm presets={state.foodPresets} onSubmit={addFood}
+            onManage={() => setLib('food')}
+            onSubmitDraft={(mt, item) => { setDraft(draft.concat([{ ...item, mealType: mt }])); setSheet(null); toast('已加入试算'); }} />}
+          {mode === 'strength' && <StrengthForm state={state} onManage={() => setLib('strength')} onSubmit={w => {
+            setState(s => {
+              // 新动作名要存进自定义库，否则下次搜不到、得重打全名
+              const s2 = C.ensureExercise(s, w.name, 'strength');
+              const d = C.getDay(s2, key);
+              return { ...s2, days: { ...s2.days, [key]: { ...d, strength: d.strength.concat([w]) } } };
+            });
+            setSheet(null); toast('已记录');
+          }} />}
+          {mode === 'cardio' && <CardioForm state={state} onManage={() => setLib('cardio')} onSubmit={c => {
+            setState(s => {
+              const s2 = C.ensureExercise(s, c.name, 'cardio');
+              const d = C.getDay(s2, key);
+              return { ...s2, days: { ...s2.days, [key]: { ...d, cardio: d.cardio.concat([c]) } } };
+            });
+            setSheet(null); toast('已记录');
+          }} />}
+        </Sheet>
+      )}
+
+      {edit && (
+        <Sheet title={edit.kind === 'food' ? '编辑食物' : edit.kind === 'strength' ? '编辑力量记录' : '编辑有氧记录'}
+          onClose={() => setEdit(null)}>
+          {edit.kind === 'food' && (
+            <FoodForm presets={state.foodPresets} onSubmit={saveFoodEdit}
+              initial={{ ...edit.item, mealType: edit.mealType }}
+              onDelete={() => removeWithUndo(d => ({
+                ...d,
+                meals: d.meals
+                  .map(m => m.id === edit.mealId ? { ...m, items: (m.items || []).filter(x => x.id !== edit.item.id) } : m)
+                  .filter(m => (m.items || []).length > 0)
+              }), edit.item.name)} />
+          )}
+          {edit.kind === 'strength' && (
+            <StrengthForm state={state} initial={edit.item} onSubmit={saveEdit}
+              onDelete={() => removeWithUndo(d => ({ ...d, strength: d.strength.filter(w => w.id !== edit.item.id) }), edit.item.name)} />
+          )}
+          {edit.kind === 'cardio' && (
+            <CardioForm state={state} initial={edit.item} onSubmit={saveEdit}
+              onDelete={() => removeWithUndo(d => ({ ...d, cardio: d.cardio.filter(c => c.id !== edit.item.id) }), edit.item.name)} />
+          )}
+        </Sheet>
+      )}
+
+      {lib === 'food' && <FoodLibrary layer={1} presets={state.foodPresets} onClose={() => setLib(null)}
+        onChange={next => setState(s => ({ ...s, foodPresets: next }))} />}
+      {(lib === 'strength' || lib === 'cardio') && <ExerciseLibrary layer={1} initialKind={lib}
+        state={state} setState={setState} onClose={() => setLib(null)} />}
+    </>
+  );
+}
+
+/* ============ 历史 ============ */
+function HistoryTab({ state, setState, onJump }) {
+  const now = new Date();
+  const [ym, setYm] = useState({ y: now.getFullYear(), m: now.getMonth() });
+  const [open, setOpen] = useState(null);
+
+  const first = new Date(ym.y, ym.m, 1);
+  const daysInMonth = new Date(ym.y, ym.m + 1, 0).getDate();
+  const lead = first.getDay();
+  const today = C.todayKey();
+
+  const cells = [];
+  for (let i = 0; i < lead; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(`${ym.y}-${C.pad2(ym.m + 1)}-${C.pad2(d)}`);
+
+  function shift(n) {
+    const d = new Date(ym.y, ym.m + n, 1);
+    setYm({ y: d.getFullYear(), m: d.getMonth() });
+  }
+
+  function statusOf(key) {
+    const day = C.getDay(state, key);
+    if (C.dayIsEmpty(day)) return 'empty';
+    const t = C.dayTotals(day);
+    const tg = C.targetForDate(state.targets, key);
+    if (!tg || !tg.kcal) return 'ok';
+    return Math.abs(t.kcal - tg.kcal) <= tg.kcal * 0.1 ? 'ok' : 'warn';
+  }
+
+  const openDay = open ? C.getDay(state, open) : null;
+
+  return (
+    <>
+      <div className="hd">
+        <div>
+          <div className="hd-eyebrow">连续打卡 {C.streak(state)} 天</div>
+          <h1 className="hd-title">历史</h1>
+        </div>
+      </div>
+      <div className="scroll">
+        <div className="card" style={{ padding: '14px 13px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <button className="iconbtn pale" style={{ width: 34, height: 34 }} onClick={() => shift(-1)} aria-label="上个月">
+              <span style={{ width: 30, height: 30 }}><Icon n="left" s={16} /></span></button>
+            <span style={{ fontSize: 15, fontWeight: 500 }}>{ym.y} 年 {ym.m + 1} 月</span>
+            <button className="iconbtn pale" style={{ width: 34, height: 34 }} onClick={() => shift(1)} aria-label="下个月">
+              <span style={{ width: 30, height: 30 }}><Icon n="right" s={16} /></span></button>
+          </div>
+          <div className="cal">
+            {['日', '一', '二', '三', '四', '五', '六'].map(w => <div key={w} className="cal-h">{w}</div>)}
+            {cells.map((key, i) => {
+              if (!key) return <div key={'e' + i} />;
+              const st = statusOf(key);
+              return (
+                <button key={key} className={'cald' + (key === today ? ' today' : '')}
+                  disabled={key > today}
+                  onClick={() => setOpen(key)}>
+                  <span>{C.parseKey(key).getDate()}</span>
+                  <span className={'dot ' + (st === 'ok' ? '' : st === 'warn' ? 'warn' : 'empty')} />
+                </button>
+              );
+            })}
+          </div>
+          <div style={{ display: 'flex', gap: 14, marginTop: 12, fontSize: 11, color: 'var(--text-2)' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="dot" />热量达标</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="dot warn" />有记录但偏离</span>
+          </div>
+        </div>
+      </div>
+
+      {open && openDay && (
+        <Sheet title={fmtDate(open)} onClose={() => setOpen(null)}>
+          {(() => {
+            const t = C.dayTotals(openDay);
+            const tg = C.targetForDate(state.targets, open);
+            return (
+              <>
+                <div className="card" style={{ padding: '12px 14px', marginBottom: 16, fontFamily: 'var(--mono)', fontSize: 13, lineHeight: 1.8 }}>
+                  <div>{t.kcal} / {tg ? tg.kcal : '—'} kcal</div>
+                  <div style={{ color: 'var(--text-2)' }}>P {t.p} · F {t.f} · C {t.c}{t.burned ? ` · 消耗 ${t.burned}` : ''}</div>
+                </div>
+                <DayRecords day={openDay} dense onEdit={() => { setOpen(null); onJump(open); }} />
+                <div style={{ marginTop: 16 }}>
+                  <Field label="备注">
+                    <textarea rows={3} value={openDay.note}
+                      placeholder="睡眠、状态、外食场合…"
+                      onChange={e => setState(s => ({ ...s, days: { ...s.days, [open]: { ...C.getDay(s, open), note: e.target.value } } }))} />
+                  </Field>
+                </div>
+                <button className="btn" onClick={() => { setOpen(null); onJump(open); }}>
+                  <Icon n="pencil" s={17} />在日视图补录这一天
+                </button>
+              </>
+            );
+          })()}
+        </Sheet>
+      )}
+    </>
+  );
+}
+
+/* ============ 统计 ============ */
+function Switch({ on, onChange, label }) {
+  return (
+    <button role="switch" aria-checked={on} aria-label={label} onClick={() => onChange(!on)}
+      style={{
+        width: 46, height: 28, borderRadius: 14, border: 0, padding: 3, cursor: 'pointer',
+        background: on ? 'var(--brand)' : 'var(--divider)', display: 'flex',
+        justifyContent: on ? 'flex-end' : 'flex-start', transition: 'background .18s', flex: '0 0 auto'
+      }}>
+      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--card-solid)', display: 'block' }} />
+    </button>
+  );
+}
+
+function StatsTab({ state, setState, toast, viewDate }) {
+  const [days, setDays] = useState(30);
+  const [exRange, setExRange] = useState('30');
+  const [prompt, setPrompt] = useState(C.DEFAULT_PROMPT);
+  const [addOpen, setAddOpen] = useState(false);
+  const [reportText, setReportText] = useState('');
+
+  const to = C.todayKey();
+  const from = C.addDays(to, -(days - 1));
+
+  // 导出区间独立于统计区间
+  const [exFrom, exTo] = useMemo(() => {
+    if (exRange === 'day') return [viewDate, viewDate];
+    if (exRange === 'all') {
+      const keys = Object.keys(state.days)
+        .filter(k => !C.dayIsEmpty(C.getDay(state, k))).sort();
+      return [keys[0] || to, to];
+    }
+    return [C.addDays(to, -(+exRange - 1)), to];
+  }, [exRange, viewDate, state.days, to]);
+  const exOneDay = exFrom === exTo;
+
+  // 切到单日/多日时换用对应的默认提示词，但只在用户没改过的时候换，不能覆盖手写内容
+  useEffect(() => {
+    const want = exOneDay ? C.DAY_PROMPT : C.DEFAULT_PROMPT;
+    setPrompt(p => (p === C.DAY_PROMPT || p === C.DEFAULT_PROMPT) ? want : p);
+  }, [exOneDay]);
+
+  const series = useMemo(() => {
+    const out = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const key = C.addDays(to, -i);
+      const day = C.getDay(state, key);
+      const t = C.dayTotals(day);
+      const tg = C.targetForDate(state.targets, key);
+      out.push({
+        key, kcal: t.kcal, p: t.p, volume: t.volume,
+        target: tg ? tg.kcal : 0,
+        empty: C.dayIsEmpty(day),
+        hit: tg && tg.kcal ? Math.abs(t.kcal - tg.kcal) <= tg.kcal * 0.1 : false
+      });
+    }
+    return out;
+  }, [state, days, to]);
+
+  const withData = series.filter(d => !d.empty);
+  const avgKcal = withData.length ? Math.round(withData.reduce((a, b) => a + b.kcal, 0) / withData.length) : 0;
+  const avgP = withData.length ? C.round(withData.reduce((a, b) => a + b.p, 0) / withData.length, 1) : 0;
+  const hits = withData.filter(d => d.hit).length;
+  const volume = series.reduce((a, b) => a + b.volume, 0);
+  const maxKcal = Math.max(1, ...series.map(d => Math.max(d.kcal, d.target)));
+
+  const payload = useMemo(() => C.exportPayload(state, exFrom, exTo, null), [state, exFrom, exTo]);
+  const sizeKb = useMemo(() => Math.round(JSON.stringify(payload).length / 1024), [payload]);
+  const buildJson = useCallback(() => JSON.stringify({ ...payload, analysisPrompt: prompt }, null, 2), [payload, prompt]);
+
+  return (
+    <>
+      <div className="hd">
+        <div>
+          <div className="hd-eyebrow">近 {days} 天</div>
+          <h1 className="hd-title">统计</h1>
+        </div>
+      </div>
+      <div className="scroll">
+        <Seg value={String(days)} onChange={v => setDays(+v)} options={[
+          { id: '7', label: '7 天' }, { id: '30', label: '30 天' }, { id: '90', label: '90 天' }]} />
+
+        <div className="grid2" style={{ marginTop: 14 }}>
+          <div className="stat"><div className="stat-l">平均热量</div><div className="stat-v">{avgKcal}</div></div>
+          <div className="stat"><div className="stat-l">平均蛋白 g</div><div className="stat-v">{avgP}</div></div>
+          <div className="stat"><div className="stat-l">热量达标天</div><div className="stat-v">{hits}<span style={{ fontSize: 13, color: 'var(--text-2)' }}> / {withData.length}</span></div></div>
+          <div className="stat"><div className="stat-l">训练总容量 kg</div><div className="stat-v">{volume}</div></div>
+        </div>
+
+        <div className="sec">
+          <div className="sec-hd"><span className="sec-t">每日热量（实心为达标）</span></div>
+          <div className="card" style={{ padding: '14px 13px' }}>
+            {withData.length === 0 ? <Empty>这段时间还没有记录。</Empty> : (
+              <>
+                <div className="spark">
+                  {(() => {
+                    const tg = series.filter(d => d.target > 0);
+                    if (!tg.length) return null;
+                    const avgT = tg.reduce((a, b) => a + b.target, 0) / tg.length;
+                    return <div className="spark-goal" style={{ bottom: (avgT / maxKcal * 100) + '%' }} />;
+                  })()}
+                  {series.map(d => (
+                    <i key={d.key} className={d.hit ? 'hit' : ''}
+                      style={{ height: (d.kcal / maxKcal * 100) + '%' }}
+                      title={`${shortDate(d.key)} · ${d.kcal} kcal`} />
+                  ))}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--text-2)', marginTop: 6, fontFamily: 'var(--mono)' }}>
+                  <span>{shortDate(series[0].key)}</span>
+                  <span>虚线为目标</span>
+                  <span>{shortDate(series[series.length - 1].key)}</span>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="sec">
+          <div className="sec-hd"><span className="sec-t">导出给 AI 分析</span></div>
+          <div className="card" style={{ padding: '13px 14px' }}>
+            <div style={{ marginBottom: 14 }}>
+              <Seg value={exRange} onChange={setExRange} options={[
+                { id: 'day', label: '当天' }, { id: '7', label: '7 天' },
+                { id: '30', label: '30 天' }, { id: 'all', label: '全部' }]} />
+            </div>
+            <Field label="分析提示词（会写进 JSON 的 analysisPrompt）">
+              <textarea rows={5} value={prompt} onChange={e => setPrompt(e.target.value)} />
+            </Field>
+            <div className="rs" style={{ marginBottom: 12 }}>
+              {exOneDay ? `${exFrom}（${dayTitle(exFrom)}）` : `${exFrom} ~ ${exTo}`}
+              {' · '}有数据 {payload.range.daysWithData} 天 · 约 {sizeKb} KB
+            </div>
+            {payload.range.daysWithData === 0 && (
+              <div className="rs" style={{ marginBottom: 12, color: 'var(--warn)' }}>
+                这个范围里没有记录，导出的会是一份空数据。
+              </div>
+            )}
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button className="btn ghost" style={{ flex: 1 }}
+                onClick={() => downloadFile(
+                  exOneDay ? `dietlog-${exFrom}.json` : `dietlog-${exFrom}_${exTo}.json`, buildJson())}>
+                <Icon n="download" s={16} />下载
+              </button>
+              <button className="btn" style={{ flex: 1, height: 44, fontSize: 14 }}
+                onClick={async () => toast(await copyText(buildJson()) ? '已复制 JSON' : '复制失败，请用下载')}>
+                <Icon n="copy" s={16} />复制 JSON
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="sec">
+          <div className="sec-hd">
+            <span className="sec-t">AI 分析存档</span>
+            <button className="linkbtn" onClick={() => { setReportText(''); setAddOpen(true); }}>添加</button>
+          </div>
+          <div className="card">
+            {state.aiReports.length === 0 ? (
+              <Empty>把 AI 的回复贴回来存档，<br />以后能对照当时的数据回看。</Empty>
+            ) : state.aiReports.slice().reverse().map((r, i) => (
+              <React.Fragment key={r.id}>
+                {i > 0 && <div className="rowdiv" />}
+                <div className="row" style={{ alignItems: 'flex-start', paddingTop: 13, paddingBottom: 13 }}>
+                  <div className="tile"><Icon n="sparkles" s={16} /></div>
+                  <div className="grow">
+                    <div className="rt">{r.range.from === r.range.to ? r.range.from : `${r.range.from} ~ ${r.range.to}`}</div>
+                    <div className="rs" style={{ marginTop: 4, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{r.responseText}</div>
+                    <div className="rs" style={{ marginTop: 6, opacity: .7 }}>
+                      {new Date(r.createdAt).toLocaleDateString()} · {r.source === 'api' ? 'API' : '手动粘贴'} · 含数据快照
+                    </div>
+                  </div>
+                  <button className="iconbtn pale" style={{ width: 32, height: 32, marginRight: -6 }} aria-label="删除存档"
+                    onClick={() => setState(s => ({ ...s, aiReports: s.aiReports.filter(x => x.id !== r.id) }))}>
+                    <span style={{ width: 26, height: 26, background: 'transparent' }}><Icon n="trash" s={15} /></span>
+                  </button>
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {addOpen && (
+        <Sheet title="存档 AI 分析" onClose={() => setAddOpen(false)}>
+          <div className="rs" style={{ marginBottom: 14, lineHeight: 1.7 }}>
+            会连同当前导出范围（{exOneDay ? exFrom : `${exFrom} ~ ${exTo}`}）的数据快照一起存下来，以后回看时能知道结论是基于什么数据得出的。
+          </div>
+          <Field label="AI 的回复">
+            <textarea rows={10} value={reportText} onChange={e => setReportText(e.target.value)} placeholder="粘贴到这里" />
+          </Field>
+          <button className="btn" disabled={!reportText.trim()} onClick={() => {
+            setState(s => ({
+              ...s, aiReports: s.aiReports.concat([{
+                id: C.uid(), createdAt: new Date().toISOString(),
+                range: { from: exFrom, to: exTo }, requestPayload: { ...payload, analysisPrompt: prompt }, promptUsed: prompt,
+                responseText: reportText.trim(), source: 'manual'
+              }])
+            }));
+            setAddOpen(false); toast('已存档');
+          }}>保存</button>
+        </Sheet>
+      )}
+    </>
+  );
+}
+
+/* ============ 设置 ============ */
+function SettingsTab({ state, setState, toast }) {
+  const fileRef = useRef(null);
+  const [lib, setLib] = useState(null);
+  const hiddenCount = (state.hiddenExerciseIds || []).length;
+  const p = state.profile;
+  const cur = C.targetForDate(state.targets, C.todayKey()) || { kcal: 0, proteinG: 0, fatG: 0, carbG: 0 };
+  const [t, setT] = useState({
+    kcal: String(cur.kcal), proteinG: String(cur.proteinG),
+    fatG: String(cur.fatG), carbG: String(cur.carbG)
+  });
+  const est = C.tdee(p);
+  const dirty = +t.kcal !== cur.kcal || +t.proteinG !== cur.proteinG || +t.fatG !== cur.fatG || +t.carbG !== cur.carbG;
+
+  function setProfile(patch) { setState(s => ({ ...s, profile: { ...s.profile, ...patch } })); }
+  function setSetting(patch) { setState(s => ({ ...s, settings: { ...s.settings, ...patch } })); }
+
+  function saveTargets() {
+    const today = C.todayKey();
+    const next = { effectiveFrom: today, kcal: C.num(t.kcal), proteinG: C.num(t.proteinG), fatG: C.num(t.fatG), carbG: C.num(t.carbG) };
+    setState(s => {
+      const list = s.targets.filter(x => x.effectiveFrom !== today).concat([next]);
+      list.sort((a, b) => a.effectiveFrom < b.effectiveFrom ? -1 : 1);
+      return { ...s, targets: list };
+    });
+    toast('目标已更新，历史日期不受影响');
+  }
+
+  function applySuggestion() {
+    const sug = C.suggestTargets(p);
+    setT({ kcal: String(sug.kcal), proteinG: String(sug.proteinG), fatG: String(sug.fatG), carbG: String(sug.carbG) });
+  }
+
+  function importFile(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const raw = JSON.parse(String(r.result));
+        // 既支持完整备份，也支持导出给 AI 的分析包（后者只含 days，不覆盖设置）
+        if (raw.days && Array.isArray(raw.days)) {
+          const map = {};
+          raw.days.forEach(d => { map[d.date] = { meals: [], strength: [], cardio: [], note: d.note || '' }; });
+          setState(s => ({ ...s, days: { ...s.days, ...map } }));
+          toast('分析包只含汇总，仅恢复了日期与备注');
+        } else {
+          setState(C.migrate(raw));
+          toast('已导入');
+        }
+      } catch (err) { toast('文件解析失败'); }
+    };
+    r.readAsText(file);
+    e.target.value = '';
+  }
+
+  return (
+    <>
+      <div className="hd"><div><div className="hd-eyebrow">本地存储，数据不出设备</div><h1 className="hd-title">设置</h1></div></div>
+      <div className="scroll">
+        <div className="sec" style={{ marginTop: 0 }}>
+          <div className="sec-hd"><span className="sec-t">个人档案</span></div>
+          <div className="card" style={{ padding: '14px 14px 2px' }}>
+            <Field label="性别（用于基础代谢公式）">
+              <Seg value={p.sex} onChange={v => setProfile({ sex: v })}
+                options={[{ id: 'male', label: '男' }, { id: 'female', label: '女' }]} />
+            </Field>
+            <div className="grid2">
+              <Field label="出生年"><NumInput value={p.birthYear} onChange={v => setProfile({ birthYear: C.num(v) })} /></Field>
+              <Field label="身高 cm"><NumInput value={p.heightCm} onChange={v => setProfile({ heightCm: C.num(v) })} /></Field>
+            </div>
+            <Field label="体重 kg">
+              <NumInput value={p.weightKg} onChange={v => setProfile({ weightKg: C.num(v) })} />
+              <div className="rs" style={{ marginTop: 7, lineHeight: 1.6 }}>
+                只用于算基础代谢，不做每日记录。体重变化明显时手动改一次即可。
+              </div>
+            </Field>
+            <Field label="活动强度">
+              <select value={p.activityLevel} onChange={e => setProfile({ activityLevel: e.target.value })}>
+                {C.ACTIVITY_LEVELS.map(a => <option key={a.id} value={a.id}>{a.label} ×{a.factor}</option>)}
+              </select>
+            </Field>
+          </div>
+        </div>
+
+        <div className="sec">
+          <div className="sec-hd">
+            <span className="sec-t">每日目标</span>
+            <button className="linkbtn" onClick={applySuggestion}>套用推荐值</button>
+          </div>
+          <div className="card" style={{ padding: '14px 14px 2px' }}>
+            <div className="rs" style={{ marginBottom: 12, lineHeight: 1.7 }}>
+              估算 TDEE <b style={{ fontFamily: 'var(--mono)' }}>{est}</b> kcal（Mifflin-St Jeor × 活动系数）。
+              推荐值按蛋白 1.6 g/kg、脂肪占 25% 热量、碳水补足计算，可任意覆盖。
+            </div>
+            <div className="grid2">
+              <Field label="热量 kcal"><NumInput value={t.kcal} onChange={v => setT({ ...t, kcal: v })} /></Field>
+              <Field label="蛋白质 g"><NumInput value={t.proteinG} onChange={v => setT({ ...t, proteinG: v })} /></Field>
+            </div>
+            <div className="grid2">
+              <Field label="脂肪 g"><NumInput value={t.fatG} onChange={v => setT({ ...t, fatG: v })} /></Field>
+              <Field label="碳水 g"><NumInput value={t.carbG} onChange={v => setT({ ...t, carbG: v })} /></Field>
+            </div>
+            <div style={{ paddingBottom: 12 }}>
+              <button className="btn sm" disabled={!dirty} onClick={saveTargets}>
+                {dirty ? '保存为今天起生效' : '目标已是最新'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="sec">
+          <div className="sec-hd"><span className="sec-t">偏好</span></div>
+          <div className="card">
+            <div className="row">
+              <div className="tile pale"><Icon n="flame" s={16} /></div>
+              <div className="grow">
+                <div className="rt">训练消耗回补额度</div>
+                <div className="rs">活动系数已含日常活动，开启会双重计算</div>
+              </div>
+              <Switch on={!!state.settings.addBurnedToBudget} label="训练消耗回补额度"
+                onChange={v => setSetting({ addBurnedToBudget: v })} />
+            </div>
+            <div className="rowdiv" />
+            <div className="row" style={{ flexWrap: 'wrap', paddingTop: 12, paddingBottom: 12 }}>
+              <div className="tile pale"><Icon n="monitor" s={16} /></div>
+              <div className="grow"><div className="rt">主题</div></div>
+              <div style={{ width: '100%', marginTop: 10 }}>
+                <Seg value={state.settings.theme} onChange={v => setSetting({ theme: v })} options={[
+                  { id: 'auto', label: '跟随系统' }, { id: 'light', label: '浅色' }, { id: 'dark', label: '深色' }]} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="sec">
+          <div className="sec-hd"><span className="sec-t">资料库</span></div>
+          <div className="card">
+            <button className="row" style={{ width: '100%', border: 0, background: 'none', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' }}
+              onClick={() => setLib('food')}>
+              <div className="tile"><Icon n="utensils" s={16} /></div>
+              <div className="grow">
+                <div className="rt">常用食物</div>
+                <div className="rs">记录过的会自动入库，可在这里改错值</div>
+              </div>
+              <span className="rv" style={{ color: 'var(--text-2)' }}>{state.foodPresets.length}</span>
+              <Icon n="right" s={16} style={{ color: 'var(--text-2)', flex: '0 0 auto', marginLeft: 6 }} />
+            </button>
+            <div className="rowdiv" />
+            <button className="row" style={{ width: '100%', border: 0, background: 'none', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' }}
+              onClick={() => setLib('exercise')}>
+              <div className="tile pale"><Icon n="dumbbell" s={16} /></div>
+              <div className="grow">
+                <div className="rt">动作库</div>
+                <div className="rs">{C.STRENGTH_DB.length + C.CARDIO_DB.length} 个内置 · 自定义 {state.customExercises.length} 个{hiddenCount ? ` · 已隐藏 ${hiddenCount}` : ''}</div>
+              </div>
+              <Icon n="right" s={16} style={{ color: 'var(--text-2)', flex: '0 0 auto', marginLeft: 6 }} />
+            </button>
+          </div>
+        </div>
+
+        <div className="sec">
+          <div className="sec-hd"><span className="sec-t">数据</span></div>
+          <div className="card" style={{ padding: 13 }}>
+            <div className="rs" style={{ marginBottom: 12, lineHeight: 1.7 }}>
+              数据只存在这台设备的浏览器里。清缓存会全部丢失，请定期导出备份。
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+              <button className="btn ghost" onClick={() =>
+                downloadFile(`dietlog-backup-${C.todayKey()}.json`, JSON.stringify(state, null, 2))}>
+                <Icon n="download" s={16} />导出完整备份
+              </button>
+              <button className="btn ghost" onClick={() => fileRef.current && fileRef.current.click()}>
+                <Icon n="upload" s={16} />导入备份
+              </button>
+              <input ref={fileRef} type="file" accept="application/json,.json" onChange={importFile}
+                style={{ display: 'none' }} />
+              <button className="btn ghost danger" onClick={() => {
+                if (confirm('清空全部数据？此操作不可撤销，建议先导出备份。')) { setState(C.defaultState()); toast('已清空'); }
+              }}><Icon n="trash" s={16} />清空全部数据</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="rs" style={{ textAlign: 'center', marginTop: 22, opacity: .7 }}>
+          schema v{C.SCHEMA_VERSION} · 共 {Object.keys(state.days).length} 天记录
+        </div>
+      </div>
+
+      {lib === 'food' && <FoodLibrary presets={state.foodPresets} onClose={() => setLib(null)}
+        onChange={next => setState(s => ({ ...s, foodPresets: next }))} />}
+      {lib === 'exercise' && <ExerciseLibrary state={state} setState={setState} onClose={() => setLib(null)} />}
+    </>
+  );
+}
+
+/* ============ 首次引导 ============ */
+function Onboarding({ state, setState, onClose }) {
+  const [p, setP] = useState(() => ({ ...state.profile }));
+  const complete = C.profileComplete(p);
+  const sug = complete ? C.suggestTargets(p) : null;
+
+  return (
+    <Sheet title="先设定一下" onClose={onClose}>
+      <div className="rs" style={{ marginBottom: 18, lineHeight: 1.75 }}>
+        算每日目标需要这几项。填完会给一组推荐值，之后随时能在设置里改。
+      </div>
+      <Field label="性别（基础代谢公式需要）">
+        <Seg value={p.sex} onChange={v => setP({ ...p, sex: v })}
+          options={[{ id: 'male', label: '男' }, { id: 'female', label: '女' }]} />
+      </Field>
+      <div className="grid2">
+        <Field label="出生年"><NumInput value={p.birthYear} onChange={v => setP({ ...p, birthYear: v })} placeholder="1995" /></Field>
+        <Field label="身高 cm"><NumInput value={p.heightCm} onChange={v => setP({ ...p, heightCm: v })} placeholder="172" /></Field>
+      </div>
+      <Field label="体重 kg">
+        <NumInput value={p.weightKg} onChange={v => setP({ ...p, weightKg: v })} placeholder="68" />
+        <div className="rs" style={{ marginTop: 7, lineHeight: 1.6 }}>只用于算基础代谢，不做每日记录。</div>
+      </Field>
+      <Field label="活动强度">
+        <select value={p.activityLevel} onChange={e => setP({ ...p, activityLevel: e.target.value })}>
+          {C.ACTIVITY_LEVELS.map(a => <option key={a.id} value={a.id}>{a.label} ×{a.factor}</option>)}
+        </select>
+      </Field>
+
+      {complete ? (
+        <div className="card" style={{ padding: '13px 14px', marginBottom: 16, fontSize: 13, lineHeight: 1.9 }}>
+          <div>估算 TDEE <b style={{ fontFamily: 'var(--mono)' }}>{C.tdee(p)}</b> kcal</div>
+          <div style={{ color: 'var(--text-2)', fontFamily: 'var(--mono)' }}>
+            推荐 {sug.kcal} kcal · P {sug.proteinG} · F {sug.fatG} · C {sug.carbG}
+          </div>
+        </div>
+      ) : (
+        <div className="rs" style={{ marginBottom: 16 }}>把出生年、身高、体重填完就能算出推荐值。</div>
+      )}
+
+      <button className="btn" disabled={!complete} onClick={() => {
+        const profile = {
+          sex: p.sex, birthYear: C.num(p.birthYear), heightCm: C.num(p.heightCm),
+          weightKg: C.num(p.weightKg), activityLevel: p.activityLevel
+        };
+        const t = C.suggestTargets(profile);
+        setState(s => ({
+          ...s, profile,
+          settings: { ...s.settings, onboarded: true },
+          targets: [{ effectiveFrom: '2000-01-01', kcal: t.kcal, proteinG: t.proteinG, fatG: t.fatG, carbG: t.carbG }]
+        }));
+        onClose();
+      }}>开始使用</button>
+    </Sheet>
+  );
+}
+
+/* ============ App ============ */
+const TABS = [
+  { id: 'today', label: '今日', icon: 'pencil' },
+  { id: 'history', label: '历史', icon: 'calendar' },
+  { id: 'stats', label: '统计', icon: 'chart' },
+  { id: 'settings', label: '设置', icon: 'settings' }
+];
+
+function App() {
+  const [state, setState] = useState(() => C.load());
+  const [tab, setTab] = useState('today');
+  const [viewDate, setViewDate] = useState(() => C.todayKey());
+  const [setupOpen, setSetupOpen] = useState(false);
+  const needSetup = !state.settings.onboarded;
+  const [toastMsg, setToastMsg] = useState(null);
+  const timer = useRef(null);
+
+  const toast = useCallback((m, undo) => {
+    setToastMsg({ text: m, undo });
+    if (timer.current) clearTimeout(timer.current);
+    // 带撤销的多留几秒，够看清再决定
+    timer.current = setTimeout(() => setToastMsg(null), undo ? 6000 : 2200);
+  }, []);
+
+  useEffect(() => { C.save(state); }, [state]);
+
+  // 应用长时间挂着跨过午夜时，视图仍停在昨天且右箭头是禁用的，回到前台时校正
+  useEffect(() => {
+    const check = () => {
+      if (document.visibilityState !== 'visible') return;
+      const t = C.todayKey();
+      setViewDate(d => (d > t ? t : d));
+    };
+    document.addEventListener('visibilitychange', check);
+    return () => document.removeEventListener('visibilitychange', check);
+  }, []);
+
+  // 桌面端方向键切日期；有弹层打开或正在输入时不抢按键
+  useEffect(() => {
+    const h = (e) => {
+      if (tab !== 'today' || sheetStack.length) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = document.activeElement;
+      if (el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); setViewDate(d => C.addDays(d, -1)); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); setViewDate(d => (d < C.todayKey() ? C.addDays(d, 1) : d)); }
+    };
+    document.addEventListener('keydown', h);
+    return () => document.removeEventListener('keydown', h);
+  }, [tab]);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => {
+      const th = state.settings.theme;
+      const dark = th === 'dark' || (th === 'auto' && mq.matches);
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    };
+    apply();
+    if (state.settings.theme === 'auto') {
+      mq.addEventListener('change', apply);
+      return () => mq.removeEventListener('change', apply);
+    }
+  }, [state.settings.theme]);
+
+  return (
+    <div className="app">
+      {tab === 'today' && <TodayTab state={state} setState={setState} toast={toast}
+        viewDate={viewDate} setViewDate={setViewDate} onSetup={() => setSetupOpen(true)} />}
+      {tab === 'history' && <HistoryTab state={state} setState={setState}
+        onJump={key => { setViewDate(key); setTab('today'); }} />}
+      {tab === 'stats' && <StatsTab state={state} setState={setState} toast={toast} viewDate={viewDate} />}
+      {tab === 'settings' && <SettingsTab state={state} setState={setState} toast={toast} />}
+
+      <nav className="tabbar">
+        {TABS.map(t => (
+          <button key={t.id} aria-current={tab === t.id ? 'page' : undefined} onClick={() => setTab(t.id)}>
+            <Icon n={t.icon} s={21} sw={tab === t.id ? 2 : 1.75} />
+            <span>{t.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      {(needSetup || setupOpen) && (
+        <Onboarding state={state} setState={setState} onClose={() => setSetupOpen(false)} />
+      )}
+
+      {toastMsg && (
+        <div className="toast" role="status">
+          <span>{toastMsg.text}</span>
+          {toastMsg.undo && <button onClick={() => { toastMsg.undo(); setToastMsg(null); }}>撤销</button>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+</script>
+</body>
+</html>

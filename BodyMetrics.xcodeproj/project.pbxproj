@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		35A32C083029F1E200645ADD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35A32BE53029F1E200645ADD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 35A32BEC3029F1E200645ADD;
+			remoteInfo = BodyMetrics;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		35A32BED3029F1E200645ADD /* BodyMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BodyMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		35A32C013029F1E200645ADD /* BodyMetricsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BodyMetricsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = BodyMetrics;
 			sourceTree = "<group>";
 		};
+		35A32C023029F1E200645ADD /* BodyMetricsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BodyMetricsTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		35A32BEA3029F1E200645ADD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		35A32C053029F1E200645ADD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				35A32BEF3029F1E200645ADD /* BodyMetrics */,
+				35A32C023029F1E200645ADD /* BodyMetricsTests */,
 				35A32BEE3029F1E200645ADD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				35A32BED3029F1E200645ADD /* BodyMetrics.app */,
+				35A32C013029F1E200645ADD /* BodyMetricsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 			productReference = 35A32BED3029F1E200645ADD /* BodyMetrics.app */;
 			productType = "com.apple.product-type.application";
 		};
+		35A32C033029F1E200645ADD /* BodyMetricsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 35A32C093029F1E200645ADD /* Build configuration list for PBXNativeTarget "BodyMetricsTests" */;
+			buildPhases = (
+				35A32C043029F1E200645ADD /* Sources */,
+				35A32C053029F1E200645ADD /* Frameworks */,
+				35A32C063029F1E200645ADD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				35A32C073029F1E200645ADD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				35A32C023029F1E200645ADD /* BodyMetricsTests */,
+			);
+			name = BodyMetricsTests;
+			packageProductDependencies = (
+			);
+			productName = BodyMetricsTests;
+			productReference = 35A32C013029F1E200645ADD /* BodyMetricsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +130,10 @@
 				TargetAttributes = {
 					35A32BEC3029F1E200645ADD = {
 						CreatedOnToolsVersion = 26.4;
+					};
+					35A32C033029F1E200645ADD = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = 35A32BEC3029F1E200645ADD;
 					};
 				};
 			};
@@ -100,12 +152,20 @@
 			projectRoot = "";
 			targets = (
 				35A32BEC3029F1E200645ADD /* BodyMetrics */,
+				35A32C033029F1E200645ADD /* BodyMetricsTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		35A32BEB3029F1E200645ADD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		35A32C063029F1E200645ADD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +182,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		35A32C043029F1E200645ADD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		35A32C073029F1E200645ADD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 35A32BEC3029F1E200645ADD /* BodyMetrics */;
+			targetProxy = 35A32C083029F1E200645ADD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		35A32BF63029F1E400645ADD /* Debug */ = {
@@ -258,8 +333,8 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "体重管理";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "用于解锁你的体重记录";
+				INFOPLIST_KEY_CFBundleDisplayName = "体重与饮食";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "用于解锁你的体重与饮食记录";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -270,7 +345,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bodymetrics.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bodymetrics.fusion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -292,8 +367,8 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "体重管理";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "用于解锁你的体重记录";
+				INFOPLIST_KEY_CFBundleDisplayName = "体重与饮食";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "用于解锁你的体重与饮食记录";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -304,7 +379,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bodymetrics.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bodymetrics.fusion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -313,6 +388,48 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		35A32C0A3029F1E200645ADD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bodymetrics.fusion.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BodyMetrics.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BodyMetrics";
+			};
+			name = Debug;
+		};
+		35A32C0B3029F1E200645ADD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bodymetrics.fusion.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BodyMetrics.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BodyMetrics";
 			};
 			name = Release;
 		};
@@ -333,6 +450,15 @@
 			buildConfigurations = (
 				35A32BF93029F1E400645ADD /* Debug */,
 				35A32BFA3029F1E400645ADD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		35A32C093029F1E200645ADD /* Build configuration list for PBXNativeTarget "BodyMetricsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				35A32C0A3029F1E200645ADD /* Debug */,
+				35A32C0B3029F1E200645ADD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
