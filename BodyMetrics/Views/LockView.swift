@@ -11,7 +11,7 @@ struct LockView: View {
                 Image(systemName: "lock.fill")
                     .font(.system(size: 40))
                     .foregroundStyle(Color("BrandGreen"))
-                Text("衡")
+                Text("体重管理")
                     .font(.system(size: 30, weight: .bold))
                     .foregroundStyle(Color("TextPrimary"))
                 Text("已锁定")

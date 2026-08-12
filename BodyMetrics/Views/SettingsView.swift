@@ -11,6 +11,7 @@ struct ShareItem: Identifiable {
 struct SettingsView: View {
     @Query(sort: \MetricEntry.date, order: .reverse) private var entries: [MetricEntry]
     @Query private var profiles: [UserProfile]
+    @Query private var reminders: [Reminder]
     @Environment(\.modelContext) private var context
 
     @State private var showGoalEditor = false
@@ -18,6 +19,7 @@ struct SettingsView: View {
     @State private var showHeightEditor = false
     @State private var heightText = ""
     @State private var showNotificationDeniedAlert = false
+    @State private var showReminders = false
     @State private var showBiometricUnavailableAlert = false
     @State private var shareItem: ShareItem? = nil
     @State private var showToast = false
@@ -38,12 +40,6 @@ struct SettingsView: View {
                     // 记录
                     groupTitle("记录")
                     VStack(spacing: 0) {
-                        row(icon: "scale", iconPale: false, title: "体重单位") {
-                            Text("千克(kg)")
-                                .font(.system(size: 12))
-                                .foregroundStyle(Color("TextSecondary"))
-                        }
-                        Divider().padding(.leading, 57)
                         row(icon: "target", iconPale: true, title: "我的目标") {
                             Text(goalValueText)
                                 .font(.system(size: 12, design: .monospaced))
@@ -76,7 +72,7 @@ struct SettingsView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("记录提醒")
                                     .font(.system(size: 14))
-                                Text(String(localized: "每天 %@").replacingOccurrences(of: "%@", with: "08:00"))
+                                Text(reminderSubtitle)
                                     .font(.system(size: 11))
                                     .foregroundStyle(Color("TextSecondary"))
                             }
@@ -87,6 +83,15 @@ struct SettingsView: View {
                         }
                         .frame(minHeight: 64)
                         .padding(.horizontal, 14)
+                        Divider().padding(.leading, 57)
+                        row(icon: "clock", iconPale: true, title: "提醒时间") {
+                            Text(reminderCountText)
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color("TextSecondary"))
+                            chevron
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture { showReminders = true }
                     }
                     .card()
 
@@ -162,6 +167,9 @@ struct SettingsView: View {
         } message: {
             Text("通知权限被拒绝,请在系统设置中开启")
         }
+        .sheet(isPresented: $showReminders) {
+            RemindersView()
+        }
         .sheet(item: $shareItem) { item in
             ShareSheet(items: [item.url]) {
                 showToastMessage(String(localized: "已导出「%@」")
@@ -195,7 +203,7 @@ struct SettingsView: View {
                     Task {
                         let granted = await NotificationService.requestAuthorization()
                         if granted {
-                            NotificationService.scheduleDailyReminder()
+                            await NotificationService.sync(times: reminderTimes, enabled: true)
                         } else {
                             profile?.reminderEnabled = false
                             try? context.save()
@@ -203,10 +211,30 @@ struct SettingsView: View {
                         }
                     }
                 } else {
-                    NotificationService.cancelDailyReminder()
+                    Task { await NotificationService.cancelAll() }
                 }
             }
         )
+    }
+
+    /// 按一天内时间排序的提醒时间
+    private var reminderTimes: [(id: UUID, hour: Int, minute: Int)] {
+        reminders
+            .sorted { $0.minutesOfDay < $1.minutesOfDay }
+            .map { (id: $0.id, hour: $0.hour, minute: $0.minute) }
+    }
+
+    /// 副标题:最多列出 3 个时间,更多则加省略
+    private var reminderSubtitle: String {
+        let sorted = reminders.sorted { $0.minutesOfDay < $1.minutesOfDay }
+        guard !sorted.isEmpty else { return String(localized: "尚未设置提醒时间") }
+        let shown = sorted.prefix(3).map(\.timeText).joined(separator: "、")
+        let suffix = sorted.count > 3 ? "…" : ""
+        return String(localized: "每天 %@").replacingOccurrences(of: "%@", with: shown + suffix)
+    }
+
+    private var reminderCountText: String {
+        String(localized: "%lld 条").replacingOccurrences(of: "%lld", with: String(reminders.count))
     }
 
     private var biometricBinding: Binding<Bool> {
@@ -311,5 +339,5 @@ private extension View {
 
 #Preview {
     SettingsView()
-        .modelContainer(for: [MetricEntry.self, UserProfile.self], inMemory: true)
+        .modelContainer(for: [MetricEntry.self, UserProfile.self, Reminder.self], inMemory: true)
 }

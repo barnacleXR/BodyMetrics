@@ -9,6 +9,7 @@ struct RecordView: View {
     @Environment(\.modelContext) private var context
 
     @State private var showLogSheet = false
+    @State private var showAllEntries = false
 
     private var profile: UserProfile? { profiles.first }
     private var weightEntries: [MetricEntry] { entries.filter { $0.metric == .weight } }
@@ -45,6 +46,9 @@ struct RecordView: View {
         }
         .sheet(isPresented: $showLogSheet) {
             LogSheetView(initialMetric: .weight)
+        }
+        .sheet(isPresented: $showAllEntries) {
+            AllEntriesView()
         }
     }
 
@@ -244,7 +248,7 @@ struct RecordView: View {
                     .foregroundStyle(Color("TextSecondary"))
                 Spacer()
                 Button(String(localized: "查看全部")) {
-                    selection = .calendar
+                    showAllEntries = true
                 }
                 .font(.system(size: 12))
                 .foregroundStyle(Color("BrandGreen"))

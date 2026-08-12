@@ -7,7 +7,7 @@ enum CSVExporter {
     /// 生成 CSV 到临时目录,返回文件 URL;失败返回 nil
     static func exportWeightCSV(
         from entries: [MetricEntry],
-        fileName: String = String(localized: "衡-体重记录.csv")
+        fileName: String = String(localized: "体重记录.csv")
     ) -> URL? {
         let weightEntries = entries
             .filter { $0.metric == .weight }

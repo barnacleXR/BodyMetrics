@@ -102,6 +102,20 @@ struct TrendView: View {
         return last.value - first.value < 0
     }
 
+    /// 纵轴范围:按窗口内数据动态取,上下各留 15% 余量。
+    /// 不从 0 起——体重这类数值区间窄,从 0 起会把折线压成一条直线,看不出变化
+    private var yDomain: ClosedRange<Double> {
+        let values = points.map(\.value)
+        guard let low = values.min(), let high = values.max() else { return 0...1 }
+        guard high > low else {
+            // 全窗口只有一个值(或全都相同):给一个固定薄区间,避免上下界相等
+            let pad = Swift.max(abs(low) * 0.02, 0.5)
+            return (low - pad)...(high + pad)
+        }
+        let pad = (high - low) * 0.15
+        return (low - pad)...(high + pad)
+    }
+
     /// 横轴 3 个标签:起点 / 中点 / 今天
     private var axisDates: [Date] {
         guard let start = points.first?.date, let end = points.last?.date else { return [] }
@@ -125,9 +139,20 @@ struct TrendView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 22)
 
-                    segmented(options: TrendMetric.allCases, selection: $metric)
-                    segmented(options: TrendRange.allCases, selection: $range)
-                        .padding(.top, 10)
+                    Picker("", selection: $metric) {
+                        ForEach(TrendMetric.allCases, id: \.self) { option in
+                            Text(option.label).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+
+                    Picker("", selection: $range) {
+                        ForEach(TrendRange.allCases, id: \.self) { option in
+                            Text(option.label).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.top, 10)
 
                     chartPanel
                         .padding(.top, 16)
@@ -141,37 +166,6 @@ struct TrendView: View {
                 .padding(.bottom, 24)
             }
         }
-    }
-
-    // MARK: - 分段控件
-
-    private func segmented<T: Hashable>(options: [T], selection: Binding<T>) -> some View where T: TrendOption {
-        HStack(spacing: 3) {
-            ForEach(options, id: \.self) { option in
-                Button {
-                    selection.wrappedValue = option
-                } label: {
-                    Text(option.label)
-                        .font(.system(size: 13))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(
-                            selection.wrappedValue == option
-                                ? Color(.systemBackground)
-                                : Color.clear,
-                            in: RoundedRectangle(cornerRadius: 10)
-                        )
-                        .foregroundStyle(
-                            selection.wrappedValue == option
-                                ? Color("TextPrimary")
-                                : Color("TextSecondary")
-                        )
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(3)
-        .background(Color("CardBackground"), in: RoundedRectangle(cornerRadius: 13))
     }
 
     // MARK: - 图表面板
@@ -233,8 +227,15 @@ struct TrendView: View {
                             .foregroundStyle(Color("TextSecondary"))
                     }
                 }
+                .chartYScale(domain: yDomain)
                 .chartYAxis {
-                    AxisMarks(position: .leading)
+                    AxisMarks(position: .leading, values: .automatic(desiredCount: 4)) { _ in
+                        AxisGridLine()
+                            .foregroundStyle(Color("TextSecondary").opacity(0.3))
+                        AxisValueLabel()
+                            .font(.system(size: 9, design: .monospaced))
+                            .foregroundStyle(Color("TextSecondary"))
+                    }
                 }
                 .frame(height: 200)
                 .padding(.top, 14)
@@ -270,14 +271,6 @@ struct TrendView: View {
         .background(Color("CardBackground"), in: RoundedRectangle(cornerRadius: 17))
     }
 }
-
-/// 分段选项协议(标签统一走 String Catalog)
-protocol TrendOption {
-    var label: String { get }
-}
-
-extension TrendView.TrendMetric: TrendOption {}
-extension TrendView.TrendRange: TrendOption {}
 
 #Preview {
     TrendView()

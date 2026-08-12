@@ -9,6 +9,7 @@ struct CalendarView: View {
     @State private var visibleMonth: Date = Calendar.current.startOfDay(for: .now)
     @State private var selectedDay: Date = Calendar.current.startOfDay(for: .now)
     @State private var showEditSheet = false
+    @State private var showDeleteConfirm = false
 
     private var calendar: Calendar { Calendar.current }
 
@@ -51,9 +52,16 @@ struct CalendarView: View {
 
     // MARK: - 详情数据
 
-    private var selectedValue: Double? {
-        StatsCalculator.latestValue(on: selectedDay, metric: .weight, in: entries)
+    /// 所选日期的代表记录(当日最新一条体重),删除时删的就是详情栏显示的这一条
+    private var selectedEntry: MetricEntry? {
+        let dayStart = calendar.startOfDay(for: selectedDay)
+        guard let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) else { return nil }
+        return entries
+            .filter { $0.metric == .weight && $0.date >= dayStart && $0.date < dayEnd }
+            .max { $0.date < $1.date }
     }
+
+    private var selectedValue: Double? { selectedEntry?.value }
 
     private var detailTitle: String {
         let dateText = selectedDay.formatted(.dateTime.month().day())
@@ -166,6 +174,18 @@ struct CalendarView: View {
             RoundedRectangle(cornerRadius: 17)
                 .stroke(Color("CardBackground"), lineWidth: 0)
         )
+        // 左右滑动翻月(左右箭头按钮保留,VoiceOver 与手势不可达时仍可用)。
+        // 用 simultaneousGesture 避免吃掉纵向滚动;只认横向占优的滑动
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 24)
+                .onEnded { value in
+                    let horizontal = value.translation.width
+                    guard abs(horizontal) > 50,
+                          abs(horizontal) > abs(value.translation.height) * 1.5
+                    else { return }
+                    changeMonth(horizontal < 0 ? 1 : -1)
+                }
+        )
     }
 
     private func dayCell(date: Date) -> some View {
@@ -197,8 +217,11 @@ struct CalendarView: View {
                 Rectangle()
                     .stroke(isToday ? Color("BrandGreen") : Color.clear, lineWidth: 2)
             )
+            // 整格都可点:否则只有日期数字那一小块响应,空白区域点不动
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(date.formatted(.dateTime.month().day()))
     }
 
     // MARK: - 当日详情
@@ -215,6 +238,16 @@ struct CalendarView: View {
                     .foregroundStyle(Color("BrandGreen"))
             }
             Spacer()
+            if selectedEntry != nil {
+                Button(String(localized: "删除")) {
+                    showDeleteConfirm = true
+                }
+                .font(.system(size: 12))
+                .foregroundStyle(Color.red.opacity(0.85))
+                .padding(.horizontal, 14)
+                .frame(height: 34)
+                .background(Color.red.opacity(0.10), in: RoundedRectangle(cornerRadius: 11))
+            }
             Button(String(localized: "编辑")) {
                 showEditSheet = true
             }
@@ -227,6 +260,25 @@ struct CalendarView: View {
         .padding(16)
         .background(Color("CardBackground"), in: RoundedRectangle(cornerRadius: 17))
         .padding(.top, 18)
+        .confirmationDialog(
+            Text("删除这条记录?"),
+            isPresented: $showDeleteConfirm,
+            titleVisibility: .visible
+        ) {
+            Button(String(localized: "删除"), role: .destructive) {
+                deleteSelectedEntry()
+            }
+            Button(String(localized: "取消"), role: .cancel) {}
+        } message: {
+            Text("删除后当日将显示该日期更早的记录(若有)。")
+        }
+    }
+
+    /// 删除详情栏当前显示的那一条(当日最新);同日若还有更早的记录会自动顶上来
+    private func deleteSelectedEntry() {
+        guard let entry = selectedEntry else { return }
+        context.delete(entry)
+        try? context.save()
     }
 }
 
